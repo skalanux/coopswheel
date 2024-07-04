@@ -85,11 +85,13 @@ def rotate_wheel(surf, image, pos, originPos, angle):
 
 def fifo_reader():
     global spinning
+    global playing
     while True:
         with open(FIFO_PATH, 'r') as fifo:
             while True:
                 data = fifo.read()
                 if data[-1:] == "O":
+                    playing = True
                     spinning = True
                 elif data[-1:] == "V":
                     reset()
@@ -101,10 +103,16 @@ def reset():
     global question_showing
     global speed
     global angle
+    global playing
+    playing = False
     spinning = False
     question_showing = False
     speed = 0
     angle = 0
+
+def show_question(angle):
+    print(angle)
+
 
 if __name__ == "__main__":
     labels = ['Tecnología', 'Cooperativismo', 'Argentina', 'Historia', 'Latinoamérica']
@@ -130,6 +138,7 @@ if __name__ == "__main__":
     running = True
     spinning = False
     question_showing = False
+    playing = False
 
     while running:
         clock.tick(60)
@@ -141,19 +150,20 @@ if __name__ == "__main__":
         
         screen.fill(0)
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
-        if spinning:
-            angle -= 1 * speed
-            speed += 0.05
-        else:
-            if speed > 0.01:
-                speed -= speed/100
+        if playing:
+            if spinning:
+                angle -= 1 * speed
+                speed += 0.05
             else:
-                speed = 0
-                if not question_showing:
-                    print("Open Question")
-                    question_showing = True
+                if speed > 0.01:
+                    speed -= speed/100
+                else:
+                    speed = 0
+                    if not question_showing:
+                        question_showing = True
+                        show_question(angle)
 
-            angle -= 1 * speed
+                angle -= 1 * speed
 
         pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
 
