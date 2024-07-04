@@ -8,6 +8,7 @@ import pygame
 pygame.init()
 screen = pygame.display.set_mode((900, 900))
 clock = pygame.time.Clock()
+FIFO_PATH = "gesture"
 
 
 def crear_grafico_torta(labels):
@@ -56,12 +57,7 @@ def crear_grafico_torta(labels):
     return buf
 
 
-labels = ['Tecnología', 'Cooperativismo', 'Argentina', 'Historia', 'Latinoamérica']
-
-# Crear gráfico de torta
-buf = crear_grafico_torta(labels)
-
-def blitRotate(surf, image, pos, originPos, angle):
+def rotate_wheel(surf, image, pos, originPos, angle):
     # offset from pivot to center
     image_rect = image.get_rect(topleft = (pos[0] - originPos[0], pos[1]-originPos[1]))
     offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
@@ -80,18 +76,6 @@ def blitRotate(surf, image, pos, originPos, angle):
     surf.blit(rotated_image, rotated_image_rect)
 
 
-try:
-    image = pygame.image.load(buf)
-except:
-    text = pygame.font.SysFont('Roboto', 50).render('image', False, (255, 255, 0))
-    image = pygame.Surface((text.get_width()+1, text.get_height()+1))
-    image.blit(text, (1, 1))
-
-w, h = image.get_size()
-
-FIFO_PATH = "gesture"
-
-# Hilo para leer del FIFO
 def fifo_reader():
     global spinning
     while True:
@@ -105,43 +89,62 @@ def fifo_reader():
                 elif data[-1:] == "X":
                     spinning = False
 
-angle = 0
 
-def spin_wheel():
-    global spinning
+    #def spin_wheel():
+    #    global spinning
+    #    angle = 0
+    #    speed = 10
+    #    while spinning:
+    #        angle += speed
+    #        speed *= 0.99  # Desacelerar gradualmente
+    #        pygame.time.wait(10)
+    #        if speed < 0.1:
+    #            spinning = False
+    #
+
+if __name__ == "__main__":
+    labels = ['Tecnología', 'Cooperativismo', 'Argentina', 'Historia', 'Latinoamérica']
     angle = 0
-    speed = 10
-    while spinning:
-        angle += speed
-        speed *= 0.99  # Desacelerar gradualmente
-        pygame.time.wait(10)
-        if speed < 0.1:
-            spinning = False
+    speed = 1
+    # Crear gráfico de torta
+    buf = crear_grafico_torta(labels)
 
-# Iniciar el hilo de lectura del FIFO
-fifo_thread = threading.Thread(target=fifo_reader)
-fifo_thread.daemon = True
-fifo_thread.start()
+    try:
+        image = pygame.image.load(buf)
+    except:
+        text = pygame.font.SysFont('Roboto', 50).render('image', False, (255, 255, 0))
+        image = pygame.Surface((text.get_width()+1, text.get_height()+1))
+        image.blit(text, (1, 1))
 
-running = True
-spinning = False
+    w, h = image.get_size()
 
-while running:
-    clock.tick(60)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
+    # Iniciar el hilo de lectura del FIFO
+    fifo_thread = threading.Thread(target=fifo_reader)
+    fifo_thread.daemon = True
+    fifo_thread.start()
 
-    pos = (screen.get_width()/2, screen.get_height()/2)
-    
-    screen.fill(0)
-    blitRotate(screen, image, pos, (w/2, h/2), angle)
-    if spinning:
-        angle -= 1
-    
-    pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
+    running = True
+    spinning = False
 
-    pygame.display.flip()
-    
-pygame.quit()
-exit()
+    while running:
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+
+        pos = (screen.get_width()/2, screen.get_height()/2)
+        
+        screen.fill(0)
+        rotate_wheel(screen, image, pos, (w/2, h/2), angle)
+        if spinning:
+            angle -= 1 * speed
+            speed += 0.01
+        else:
+            speed = 1 if speed <1 else speed - 0.01
+
+        pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
+
+        pygame.display.flip()
+        
+    pygame.quit()
+    exit()
