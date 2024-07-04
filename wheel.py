@@ -6,16 +6,19 @@ from io import BytesIO
 pygame.init()
 screen = pygame.display.set_mode((900, 900))
 clock = pygame.time.Clock()
-            
+
+plt.rcParams['font.family'] = 'Roboto' 
+
 def crear_grafico_torta(labels):
     # Número de partes
     num_partes = len(labels)
-    
+
     # Valores para las partes (iguales entre sí)
     valores = [1] * num_partes
     
     # Generar una lista de colores usando un colormap
-    cmap = plt.get_cmap('tab20')
+    #cmap = plt.get_cmap('tab20')
+    cmap = plt.get_cmap('plasma')
     colores = [cmap(i / num_partes) for i in range(num_partes)]
     
     # Crear gráfico de torta
@@ -75,19 +78,13 @@ def blitRotate(surf, image, pos, originPos, angle):
     surf.blit(rotated_image, rotated_image_rect)
 
 
-def blitRotate2(surf, image, topleft, angle):
-
-    rotated_image = pygame.transform.rotate(image, angle)
-    new_rect = rotated_image.get_rect(center = image.get_rect(topleft = topleft).center)
-
-    surf.blit(rotated_image, new_rect.topleft)
-
 try:
     image = pygame.image.load(buf)
 except:
-    text = pygame.font.SysFont('Times New Roman', 50).render('image', False, (255, 255, 0))
+    text = pygame.font.SysFont('Roboto', 50).render('image', False, (255, 255, 0))
     image = pygame.Surface((text.get_width()+1, text.get_height()+1))
     image.blit(text, (1, 1))
+
 w, h = image.get_size()
 
 FIFO_PATH = "gesture"
@@ -138,13 +135,10 @@ while running:
     
     screen.fill(0)
     blitRotate(screen, image, pos, (w/2, h/2), angle)
-    #blitRotate2(screen, image, pos, angle)
     if spinning:
         angle -= 1
     
-    pygame.draw.line(screen, (0, 255, 0), (pos[0]-20, pos[1]), (pos[0]+20, pos[1]), 3)
-    pygame.draw.line(screen, (0, 255, 0), (pos[0], pos[1]-20), (pos[0], pos[1]+20), 3)
-    pygame.draw.circle(screen, (0, 255, 0), pos, 7, 0)
+    pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
 
     pygame.display.flip()
     
