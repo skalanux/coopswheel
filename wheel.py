@@ -1,16 +1,18 @@
-import pygame
+import threading
+from io import BytesIO
+
 import numpy as np
 import matplotlib.pyplot as plt
-from io import BytesIO
+import pygame
 
 pygame.init()
 screen = pygame.display.set_mode((900, 900))
 clock = pygame.time.Clock()
 
-plt.rcParams['font.family'] = 'Roboto' 
 
 def crear_grafico_torta(labels):
     # Número de partes
+    plt.rcParams['font.family'] = 'Roboto' 
     num_partes = len(labels)
 
     # Valores para las partes (iguales entre sí)
@@ -89,7 +91,6 @@ w, h = image.get_size()
 
 FIFO_PATH = "gesture"
 
-import threading
 # Hilo para leer del FIFO
 def fifo_reader():
     global spinning
