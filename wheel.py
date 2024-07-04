@@ -1,11 +1,50 @@
 import pygame
+import matplotlib.pyplot as plt
+from io import BytesIO
 
 pygame.init()
 screen = pygame.display.set_mode((900, 900))
 clock = pygame.time.Clock()
+            
+def crear_grafico_torta(labels):
+    # Número de partes
+    num_partes = len(labels)
+    
+    # Valores para las partes (iguales entre sí)
+    valores = [1] * num_partes
+    
+    # Generar una lista de colores usando un colormap
+    cmap = plt.get_cmap('tab20')
+    colores = [cmap(i / num_partes) for i in range(num_partes)]
+    # Función para mostrar etiquetas en lugar de porcentajes
+    def func(pct, allvals):
+        total = sum(allvals)
+        idx = int(pct / 100. * total)
+        return labels[idx]
+    
+    # Crear gráfico de torta
+    fig, ax = plt.subplots()
+    wedges, texts, autotexts = ax.pie(valores, labels=labels, autopct='%1.1f%%',
+       pctdistance=1.25, labeldistance=.6) 
+
+    fig.patch.set_facecolor('black') 
+    
+    # Asegurar que el gráfico sea un círculo
+    ax.axis('equal')
+    
+    # Mostrar gráfico
+    buf = BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight', facecolor=fig.get_facecolor())
+    plt.close(fig)
+    buf.seek(0)
+    return buf
+
+labels = ['Parte 1', 'Parte 2', 'Parte 3', 'Parte 4', 'Parte 5']
+
+# Crear gráfico de torta
+buf = crear_grafico_torta(labels)
 
 def blitRotate(surf, image, pos, originPos, angle):
-
     # offset from pivot to center
     image_rect = image.get_rect(topleft = (pos[0] - originPos[0], pos[1]-originPos[1]))
     offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
@@ -22,9 +61,7 @@ def blitRotate(surf, image, pos, originPos, angle):
 
     # rotate and blit the image
     surf.blit(rotated_image, rotated_image_rect)
-  
-    # draw rectangle around the image
-    #pygame.draw.rect(surf, (255, 0, 0), (*rotated_image_rect.topleft, *rotated_image.get_size()),2)
+
 
 def blitRotate2(surf, image, topleft, angle):
 
@@ -32,14 +69,12 @@ def blitRotate2(surf, image, topleft, angle):
     new_rect = rotated_image.get_rect(center = image.get_rect(topleft = topleft).center)
 
     surf.blit(rotated_image, new_rect.topleft)
-    #pygame.draw.rect(surf, (255, 0, 0), new_rect, 2)
 
 try:
-    image = pygame.image.load('airplane.png')
+    image = pygame.image.load(buf)
 except:
     text = pygame.font.SysFont('Times New Roman', 50).render('image', False, (255, 255, 0))
     image = pygame.Surface((text.get_width()+1, text.get_height()+1))
-    #pygame.draw.rect(image, (0, 0, 255), (1, 1, *text.get_size()))
     image.blit(text, (1, 1))
 w, h = image.get_size()
 
@@ -93,7 +128,7 @@ while running:
     blitRotate(screen, image, pos, (w/2, h/2), angle)
     #blitRotate2(screen, image, pos, angle)
     if spinning:
-        angle += 1
+        angle -= 1
     
     pygame.draw.line(screen, (0, 255, 0), (pos[0]-20, pos[1]), (pos[0]+20, pos[1]), 3)
     pygame.draw.line(screen, (0, 255, 0), (pos[0], pos[1]-20), (pos[0], pos[1]+20), 3)
