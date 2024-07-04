@@ -145,9 +145,13 @@ if __name__ == "__main__":
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
         if spinning:
             angle -= 1 * speed
-            speed += 0.01
+            speed += 0.05
         else:
-            speed -= 0.1 if speed>0.1 else 0
+            if speed > 0:
+                speed -= 0.1
+            else:
+                speed = 0
+
             angle -= 1 * speed
 
         pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
