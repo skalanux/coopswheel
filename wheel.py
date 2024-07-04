@@ -10,6 +10,12 @@ screen = pygame.display.set_mode((900, 900))
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
 
+# TODO: Agregar sonido de acelerado desaceleado
+# Crear preguntas random para las categorias que se respondan con Pulgar arriba o abajo y pantalla
+# Agregar fisica para desacelerar
+# Agregar fisica para acelerar
+# Aumentar tamaño de la rueda
+# Agregar teclado en pantalla para guardar tus datos
 
 def crear_grafico_torta(labels):
     # Número de partes
