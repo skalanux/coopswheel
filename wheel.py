@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 
@@ -16,30 +17,41 @@ def crear_grafico_torta(labels):
     # Generar una lista de colores usando un colormap
     cmap = plt.get_cmap('tab20')
     colores = [cmap(i / num_partes) for i in range(num_partes)]
-    # Función para mostrar etiquetas en lugar de porcentajes
-    def func(pct, allvals):
-        total = sum(allvals)
-        idx = int(pct / 100. * total)
-        return labels[idx]
     
     # Crear gráfico de torta
     fig, ax = plt.subplots()
-    wedges, texts, autotexts = ax.pie(valores, labels=labels, autopct='%1.1f%%',
-       pctdistance=1.25, labeldistance=.6) 
-
-    fig.patch.set_facecolor('black') 
     
+    # Ajustar el color de fondo
+    fig.patch.set_facecolor('black')
+    ax.set_facecolor('black')
+    
+    # Crear el gráfico de torta
+    wedges, texts = ax.pie(valores, labels=None, colors=colores, startangle=90)
+    
+    # Ajustar las etiquetas para que estén en el centro de cada sección
+    for i, wedge in enumerate(wedges):
+        angle = (wedge.theta2 - wedge.theta1) / 2.0 + wedge.theta1
+        x = 0.5 * np.cos(np.radians(angle))
+        y = 0.5 * np.sin(np.radians(angle))
+        
+        # Rotar el ángulo para que el texto se alinee con el segmento
+        rotation = angle if angle < 180 else angle - 180
+        
+        # Añadir el texto en la posición calculada desde el centro
+        ax.text(x, y, labels[i], ha='center', va='center', rotation=rotation, rotation_mode='anchor', color='white')
+
     # Asegurar que el gráfico sea un círculo
     ax.axis('equal')
     
-    # Mostrar gráfico
+    # Guardar el gráfico en un stream en memoria
     buf = BytesIO()
     plt.savefig(buf, format='png', bbox_inches='tight', facecolor=fig.get_facecolor())
     plt.close(fig)
     buf.seek(0)
     return buf
 
-labels = ['Parte 1', 'Parte 2', 'Parte 3', 'Parte 4', 'Parte 5']
+
+labels = ['Tecnología', 'Cooperativismo', 'Argentina', 'Historia', 'Latinoamérica']
 
 # Crear gráfico de torta
 buf = crear_grafico_torta(labels)
