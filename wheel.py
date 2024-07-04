@@ -6,7 +6,10 @@ import matplotlib.pyplot as plt
 import pygame
 
 pygame.init()
-screen = pygame.display.set_mode((900, 900))
+screen_width = 1024
+screen_height = 768
+
+screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
 
@@ -112,6 +115,40 @@ def reset():
 
 def show_question(angle):
     print(angle)
+    # Pregunta
+    # Colores
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+    screen.fill((black))
+
+    # Fuente y tamaño del texto
+    font = pygame.font.Font(None, 74)
+
+    question = "¿Te gusta Pygame?"
+
+    # Cargar imágenes de los pulgares
+    thumbs_up = pygame.image.load("thumbs_up.png")
+    thumbs_down = pygame.image.load("thumbs_down.png")
+
+    # Redimensionar imágenes
+    thumbs_up = pygame.transform.scale(thumbs_up, (100, 100))
+    thumbs_down = pygame.transform.scale(thumbs_down, (100, 100))
+
+    # Posiciones de las imágenes
+    thumbs_up_rect = thumbs_up.get_rect(center=(screen_width // 2 - 100, screen_height // 2 + 100))
+    thumbs_down_rect = thumbs_down.get_rect(center=(screen_width // 2 + 100, screen_height // 2 + 100))
+
+    # Renderizar el texto de la pregunta
+    text = font.render(question, True, white)
+    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+
+    # Dibujar el texto y las imágenes en la pantalla
+    screen.blit(text, text_rect)
+    screen.blit(thumbs_up, thumbs_up_rect)
+    screen.blit(thumbs_down, thumbs_down_rect)
+
+    # Actualizar la pantalla
+    pygame.display.flip()
 
 
 if __name__ == "__main__":
@@ -165,9 +202,10 @@ if __name__ == "__main__":
 
                 angle -= 1 * speed
 
-        pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
-
-        pygame.display.flip()
-        
+        if not question_showing:
+            pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
+            pygame.display.flip()
+        else:
+            ...
     pygame.quit()
     exit()
