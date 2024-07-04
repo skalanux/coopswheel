@@ -1,78 +1,51 @@
-import os
 import pygame
-import math
-import threading
 
-# Inicializar Pygame
 pygame.init()
+screen = pygame.display.set_mode((900, 900))
+clock = pygame.time.Clock()
 
-# Configuración de la pantalla
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Ruleta de Categorías")
+def blitRotate(surf, image, pos, originPos, angle):
 
-# Colores
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), 
-          (0, 255, 255), (128, 0, 128), (255, 165, 0), (0, 128, 128), (128, 128, 0)]
+    # offset from pivot to center
+    image_rect = image.get_rect(topleft = (pos[0] - originPos[0], pos[1]-originPos[1]))
+    offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
+    
+    # roatated offset from pivot to center
+    rotated_offset = offset_center_to_pivot.rotate(-angle)
 
-# Categorías
-CATEGORIES = ["Categoría 1", "Categoría 2", "Categoría 3", "Categoría 4", "Categoría 5",
-              "Categoría 6", "Categoría 7", "Categoría 8", "Categoría 9", "Categoría 10"]
+    # roatetd image center
+    rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
 
-# Configuración de la ruleta
-CENTER = (WIDTH // 2, HEIGHT // 2)
-RADIUS = 200
+    # get a rotated image
+    rotated_image = pygame.transform.rotate(image, angle)
+    rotated_image_rect = rotated_image.get_rect(center = rotated_image_center)
 
-# FIFO
+    # rotate and blit the image
+    surf.blit(rotated_image, rotated_image_rect)
+  
+    # draw rectangle around the image
+    #pygame.draw.rect(surf, (255, 0, 0), (*rotated_image_rect.topleft, *rotated_image.get_size()),2)
+
+def blitRotate2(surf, image, topleft, angle):
+
+    rotated_image = pygame.transform.rotate(image, angle)
+    new_rect = rotated_image.get_rect(center = image.get_rect(topleft = topleft).center)
+
+    surf.blit(rotated_image, new_rect.topleft)
+    #pygame.draw.rect(surf, (255, 0, 0), new_rect, 2)
+
+try:
+    image = pygame.image.load('airplane.png')
+except:
+    text = pygame.font.SysFont('Times New Roman', 50).render('image', False, (255, 255, 0))
+    image = pygame.Surface((text.get_width()+1, text.get_height()+1))
+    #pygame.draw.rect(image, (0, 0, 255), (1, 1, *text.get_size()))
+    image.blit(text, (1, 1))
+w, h = image.get_size()
+
 FIFO_PATH = "gesture"
 
-# Crear el FIFO si no existe
-if not os.path.exists(FIFO_PATH):
-    os.mkfifo(FIFO_PATH)
-
-# Función para dibujar la ruleta
-def draw_wheel(angle):
-    screen.fill(WHITE)
-    num_categories = len(CATEGORIES)
-    angle_step = 360 / num_categories
-
-    for i in range(num_categories):
-        start_angle = math.radians(i * angle_step + angle)
-        end_angle = math.radians((i + 1) * angle_step + angle)
-        color = COLORS[i % len(COLORS)]
-        
-        # Dibujar segmento de la ruleta
-        pygame.draw.arc(screen, color, (CENTER[0] - RADIUS, CENTER[1] - RADIUS, 2 * RADIUS, 2 * RADIUS), start_angle, end_angle, RADIUS)
-
-        # Dibujar líneas de los segmentos
-        pygame.draw.line(screen, BLACK, CENTER, (CENTER[0] + RADIUS * math.cos(start_angle), CENTER[1] + RADIUS * math.sin(start_angle)), 2)
-
-        # Dibujar texto
-        text_angle = math.radians((i + 0.5) * angle_step + angle)
-        text_x = CENTER[0] + RADIUS // 1.5 * math.cos(text_angle)
-        text_y = CENTER[1] + RADIUS // 1.5 * math.sin(text_angle)
-        font = pygame.font.Font(None, 30)
-        text = font.render(CATEGORIES[i], True, BLACK)
-        text_rect = text.get_rect(center=(text_x, text_y))
-        screen.blit(text, text_rect)
-
-    pygame.display.flip()
-
-# Función para girar la ruleta
-def spin_wheel():
-    global spinning
-    angle = 0
-    speed = 10
-    while spinning:
-        angle += speed
-        speed *= 0.99  # Desacelerar gradualmente
-        draw_wheel(angle)
-        pygame.time.wait(10)
-        if speed < 0.1:
-            spinning = False
-
+import threading
 # Hilo para leer del FIFO
 def fifo_reader():
     global spinning
@@ -80,25 +53,53 @@ def fifo_reader():
         with open(FIFO_PATH, 'r') as fifo:
             while True:
                 data = fifo.read()
-                if "O" in data:
+                if data[-1:] == "O":
                     spinning = True
-                    spin_thread = threading.Thread(target=spin_wheel)
-                    spin_thread.start()
+                elif data[-1:] == "V":
+                    spinning = False
+                elif data[-1:] == "X":
+                    spinning = False
+
+angle = 0
+
+def spin_wheel():
+    global spinning
+    angle = 0
+    speed = 10
+    while spinning:
+        angle += speed
+        speed *= 0.99  # Desacelerar gradualmente
+        pygame.time.wait(10)
+        if speed < 0.1:
+            spinning = False
 
 # Iniciar el hilo de lectura del FIFO
 fifo_thread = threading.Thread(target=fifo_reader)
 fifo_thread.daemon = True
 fifo_thread.start()
 
-# Bucle principal de Pygame
 running = True
 spinning = False
+
 while running:
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            done = True
 
-    draw_wheel(0)
+    pos = (screen.get_width()/2, screen.get_height()/2)
+    
+    screen.fill(0)
+    blitRotate(screen, image, pos, (w/2, h/2), angle)
+    #blitRotate2(screen, image, pos, angle)
+    if spinning:
+        angle += 1
+    
+    pygame.draw.line(screen, (0, 255, 0), (pos[0]-20, pos[1]), (pos[0]+20, pos[1]), 3)
+    pygame.draw.line(screen, (0, 255, 0), (pos[0], pos[1]-20), (pos[0], pos[1]+20), 3)
+    pygame.draw.circle(screen, (0, 255, 0), pos, 7, 0)
 
+    pygame.display.flip()
+    
 pygame.quit()
-
+exit()
