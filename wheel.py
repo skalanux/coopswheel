@@ -87,6 +87,7 @@ def rotate_wheel(surf, image, pos, originPos, angle):
 def fifo_reader():
     global spinning
     global playing
+    global question_pending
     while True:
         with open(FIFO_PATH, 'r') as fifo:
             while True:
@@ -98,6 +99,15 @@ def fifo_reader():
                     reset()
                 elif data[-1:] == "X":
                     spinning = False
+                elif data[-1:] == "U":
+                    # TODO: Send current question
+                    show_result(True)
+                    question_pending = False
+                elif data[-1:] == "D":
+                    # TODO: Send current question
+                    show_result(False)
+                    question_pending = False
+                 
 
 def reset():
     global spinning
@@ -105,16 +115,36 @@ def reset():
     global speed
     global angle
     global playing
+    global question_pending
     playing = False
     spinning = False
     question_showing = False
+    question_pending = False
     speed = 0
     angle = 0
-
-def show_question(angle):
-    print(angle)
+    
+def show_result(answer):
     # Pregunta
     # Colores
+    question_pending = True
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+    screen.fill((black))
+
+    # Fuente y tamaño del texto
+    font = pygame.font.Font(None, 74)
+
+    message = f'contestate que  {"Si if answer else No"}'
+    text = font.render(message, True, white)
+    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+    screen.blit(text, text_rect)
+    
+    pygame.display.flip()
+
+def show_question(angle):
+    # Pregunta
+    # Colores
+    question_pending = True
     white = (255, 255, 255)
     black = (0, 0, 0)
     screen.fill((black))
@@ -160,12 +190,6 @@ def show_question(angle):
 
     # Actualizar la pantalla
     pygame.display.flip()
-    with open(FIFO_PATH, 'r') as fifo:
-        done = False
-        while not done:
-            data = fifo.read()
-            print(data)
-            
 
 
 
@@ -192,6 +216,7 @@ if __name__ == "__main__":
     running = True
     spinning = False
     question_showing = False
+    question_pending = False
     playing = False
 
     while running:
