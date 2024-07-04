@@ -53,8 +53,12 @@ def fifo_reader():
         with open(FIFO_PATH, 'r') as fifo:
             while True:
                 data = fifo.read()
-                if "O" in data:
+                if data[-1:] == "O":
                     spinning = True
+                elif data[-1:] == "V":
+                    spinning = False
+                elif data[-1:] == "X":
+                    spinning = False
 
 angle = 0
 
@@ -88,14 +92,14 @@ while running:
     screen.fill(0)
     blitRotate(screen, image, pos, (w/2, h/2), angle)
     #blitRotate2(screen, image, pos, angle)
-    angle += 1
+    if spinning:
+        angle += 1
     
     pygame.draw.line(screen, (0, 255, 0), (pos[0]-20, pos[1]), (pos[0]+20, pos[1]), 3)
     pygame.draw.line(screen, (0, 255, 0), (pos[0], pos[1]-20), (pos[0], pos[1]+20), 3)
     pygame.draw.circle(screen, (0, 255, 0), pos, 7, 0)
 
-    if spinning:
-        pygame.display.flip()
+    pygame.display.flip()
     
 pygame.quit()
 exit()

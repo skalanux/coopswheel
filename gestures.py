@@ -49,10 +49,11 @@ def classify_gesture(landmarks):
         write_to_fifo("O")
         return "Mano abierta"
     else:
-        return ""
+        write_to_fifo("X")
+        return "Nada"
 
 # Captura de video
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -72,6 +73,8 @@ while cap.isOpened():
             # Obtenemos la clasificación del gesto
             gesture = classify_gesture(hand_landmarks.landmark)
             cv2.putText(frame, gesture, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+    else:
+        write_to_fifo("X")
 
     cv2.imshow('Detector de Gestos', frame)
 
