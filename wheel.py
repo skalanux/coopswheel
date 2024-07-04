@@ -16,6 +16,7 @@ FIFO_PATH = "gesture"
 # Agregar fisica para acelerar
 # Aumentar tamaño de la rueda
 # Agregar teclado en pantalla para guardar tus datos
+# Hacer un QR al final para que escaneen y llenen el form de google
 
 def crear_grafico_torta(labels):
     # Número de partes
@@ -146,7 +147,8 @@ if __name__ == "__main__":
             angle -= 1 * speed
             speed += 0.01
         else:
-            speed = 1 if speed <1 else speed - 0.01
+            speed -= 0.1 if speed>0.1 else 0
+            angle -= 1 * speed
 
         pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
 
