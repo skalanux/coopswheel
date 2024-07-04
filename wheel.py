@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pygame
 
+from questions import LABELS, Questions, questions_equivs
 pygame.init()
 screen_width = 1024
 screen_height = 768
@@ -12,13 +13,10 @@ screen_height = 768
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
-
+FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={form}'
 # TODO: Agregar sonido de acelerado desaceleado
 # Crear preguntas random para las categorias que se respondan con Pulgar arriba o abajo y pantalla
-# Agregar fisica para desacelerar
-# Agregar fisica para acelerar
 # Aumentar tamaño de la rueda
-# Agregar teclado en pantalla para guardar tus datos
 # Hacer un QR al final para que escaneen y llenen el form de google
 
 def crear_grafico_torta(labels):
@@ -124,7 +122,20 @@ def show_question(angle):
     # Fuente y tamaño del texto
     font = pygame.font.Font(None, 74)
 
-    question = "¿Te gusta Pygame?"
+    label_chosen = 'Cooperativismo'
+    category = questions_equivs.get(label_chosen)
+    questions = getattr(Questions, category).value
+
+    message = f'Elegiste {label_chosen}'
+    text = font.render(message, True, white)
+    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+    screen.blit(text, text_rect)
+    
+    pygame.display.flip()
+    pygame.time.wait(2000)
+
+    screen.fill((black))
+    question = questions[0]
 
     # Cargar imágenes de los pulgares
     thumbs_up = pygame.image.load("thumbs_up.png")
@@ -139,7 +150,7 @@ def show_question(angle):
     thumbs_down_rect = thumbs_down.get_rect(center=(screen_width // 2 + 100, screen_height // 2 + 100))
 
     # Renderizar el texto de la pregunta
-    text = font.render(question, True, white)
+    text = font.render(question[0], True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
 
     # Dibujar el texto y las imágenes en la pantalla
@@ -149,14 +160,20 @@ def show_question(angle):
 
     # Actualizar la pantalla
     pygame.display.flip()
+    with open(FIFO_PATH, 'r') as fifo:
+        done = False
+        while not done:
+            data = fifo.read()
+            print(data)
+            
+
 
 
 if __name__ == "__main__":
-    labels = ['Tecnología', 'Cooperativismo', 'Argentina', 'Historia', 'Latinoamérica']
     angle = 0
     speed = 1
     # Crear gráfico de torta
-    buf = crear_grafico_torta(labels)
+    buf = crear_grafico_torta(LABELS)
 
     try:
         image = pygame.image.load(buf)
