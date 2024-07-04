@@ -92,22 +92,19 @@ def fifo_reader():
                 if data[-1:] == "O":
                     spinning = True
                 elif data[-1:] == "V":
-                    spinning = False
+                    reset()
                 elif data[-1:] == "X":
                     spinning = False
 
-
-    #def spin_wheel():
-    #    global spinning
-    #    angle = 0
-    #    speed = 10
-    #    while spinning:
-    #        angle += speed
-    #        speed *= 0.99  # Desacelerar gradualmente
-    #        pygame.time.wait(10)
-    #        if speed < 0.1:
-    #            spinning = False
-    #
+def reset():
+    global spinning
+    global question_showing
+    global speed
+    global angle
+    spinning = False
+    question_showing = False
+    speed = 0
+    angle = 0
 
 if __name__ == "__main__":
     labels = ['Tecnología', 'Cooperativismo', 'Argentina', 'Historia', 'Latinoamérica']
@@ -132,6 +129,7 @@ if __name__ == "__main__":
 
     running = True
     spinning = False
+    question_showing = False
 
     while running:
         clock.tick(60)
@@ -147,10 +145,13 @@ if __name__ == "__main__":
             angle -= 1 * speed
             speed += 0.05
         else:
-            if speed > 0:
+            if speed > 0.01:
                 speed -= speed/100
             else:
                 speed = 0
+                if not question_showing:
+                    print("Open Question")
+                    question_showing = True
 
             angle -= 1 * speed
 
