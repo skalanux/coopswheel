@@ -15,7 +15,6 @@ clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={form}'
 # TODO: Agregar sonido de acelerado desaceleado
-# Crear preguntas random para las categorias que se respondan con Pulgar arriba o abajo y pantalla
 # Aumentar tamaño de la rueda
 # Hacer un QR al final para que escaneen y llenen el form de google
 
@@ -134,7 +133,6 @@ def show_result(answer):
 
     label_chosen = 'Resultado'
     category = questions_equivs.get(label_chosen)
-    questions = getattr(Questions, category).value
 
     message = f'Elegiste {label_chosen}'
     text = font.render(message, True, white)
@@ -260,13 +258,13 @@ if __name__ == "__main__":
 
                 if speed == 0 and not question_showing and not question_pending:
                     question_showing = True
+                    question_pending = True
                     show_question(angle)
 
-                if speed == 0 and not question_showing and question_pending:
-                    print("Mostrando el resultado")
+                if speed == 0 and question_showing and not question_pending:
+                    playing=False
                     show_result(10)
                  
-
             angle -= 1 * speed
 
         if not question_showing:
