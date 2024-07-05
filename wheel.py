@@ -14,9 +14,14 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={form}'
+COLOR_INDIGO = (186,29,122)
+COLOR_WHITE = (255,255,255)
 # TODO: Agregar sonido de acelerado desacelerando
 # Aumentar tamaño de la rueda
 # Hacer un QR al final para que escaneen y llenen el form de google
+# Mejorar detección de pulgares
+# Hacer que lea solo lo ultimo al entrar a jugar por si o por no
+# Randomizar preguntas
 
 def crear_grafico_torta(labels):
     # Número de partes
@@ -35,8 +40,8 @@ def crear_grafico_torta(labels):
     fig, ax = plt.subplots()
     
     # Ajustar el color de fondo
-    fig.patch.set_facecolor('black')
-    ax.set_facecolor('black')
+    fig.patch.set_facecolor('white')
+    ax.set_facecolor('white')
     
     # Crear el gráfico de torta
     wedges, texts = ax.pie(valores, labels=None, colors=colores, startangle=90)
@@ -88,10 +93,12 @@ def fifo_reader():
     global playing
     global question_pending
     global current_answer
+
     while True:
         with open(FIFO_PATH, 'r') as fifo:
             while True:
                 data = fifo.read()
+
                 if data[-1:] == "O":
                     playing = True
                     spinning = True
@@ -100,11 +107,9 @@ def fifo_reader():
                 elif data[-1:] == "X":
                     spinning = False
                 elif data[-1:] == "U":
-                    # TODO: Send current question
                     current_answer = True
                     question_pending = False
                 elif data[-1:] == "D":
-                    # TODO: Send current question
                     current_answer = False
                     question_pending = False
                  
@@ -135,7 +140,7 @@ def show_result(answer):
 
     white = (200, 255, 255)
     black = (0, 0, 0)
-    screen.fill((black))
+    screen.fill((COLOR_INDIGO))
 
     # Fuente y tamaño del texto
     font = pygame.font.Font(None, 74)
@@ -151,8 +156,9 @@ def show_result(answer):
 
     pygame.time.wait(2000)
 
-    screen.fill((black))
+    screen.fill((COLOR_INDIGO))
     correct_answer = current_question[1]
+    font = pygame.font.Font(None, 49)
     if correct_answer == answer:
         message = f'Ganaste :). Escanea el qr para participar del sorteo!'
     else:
@@ -188,7 +194,7 @@ def show_question(angle):
     question_pending = True
     white = (255, 255, 255)
     black = (0, 0, 0)
-    screen.fill((black))
+    screen.fill((COLOR_INDIGO))
 
     # Fuente y tamaño del texto
     font = pygame.font.Font(None, 74)
@@ -205,7 +211,7 @@ def show_question(angle):
     pygame.display.flip()
     pygame.time.wait(2000)
 
-    screen.fill((black))
+    screen.fill((COLOR_INDIGO))
     question = questions[0]
 
     current_question = question 
@@ -261,6 +267,7 @@ if __name__ == "__main__":
     question_showing = False
     question_pending = False
     playing = False
+
     while running:
         clock.tick(60)
         for event in pygame.event.get():
@@ -269,7 +276,7 @@ if __name__ == "__main__":
 
         pos = (screen.get_width()/2, screen.get_height()/2)
         
-        screen.fill(0)
+        screen.fill((COLOR_WHITE))
         
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
 
@@ -295,7 +302,19 @@ if __name__ == "__main__":
             angle -= 1 * speed
 
         if not question_showing:
-            pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
+            triangle_height = 50
+            triangle_base = 30
+
+            # Coordenadas del centro del triángulo
+            center_x = screen_width // 2
+            center_y = (screen_height // 2) - 160
+
+            # Puntos del triángulo
+            point1 = (center_x, center_y + triangle_height // 2)
+            point2 = (center_x - triangle_base // 2, center_y - triangle_height // 2)
+            point3 = (center_x + triangle_base // 2, center_y - triangle_height // 2)
+            pygame.draw.polygon(screen, COLOR_INDIGO, [point1, point2, point3])
+            #pygame.draw.line(screen, (('black')), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
             pygame.display.flip()
         else:
             ...
