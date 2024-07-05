@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={form}'
-# TODO: Agregar sonido de acelerado desaceleado
+# TODO: Agregar sonido de acelerado desacelerando
 # Aumentar tamaño de la rueda
 # Hacer un QR al final para que escaneen y llenen el form de google
 
@@ -115,12 +115,15 @@ def reset():
     global speed
     global angle
     global playing
+    global current_question
     global current_answer
     global question_pending
     playing = False
     spinning = False
     question_showing = False
     question_pending = False
+    current_answer = None
+    current_question = None
     speed = 0
     angle = 0
     
@@ -128,6 +131,8 @@ def show_result(answer):
     # Pregunta
     # Colores
     global question_pending
+    global current_question
+
     white = (200, 255, 255)
     black = (0, 0, 0)
     screen.fill((black))
@@ -147,7 +152,12 @@ def show_result(answer):
     pygame.time.wait(2000)
 
     screen.fill((black))
-    message = f'Perdiste :( . Seguí participando'
+    correct_answer = current_question[1]
+    if correct_answer == answer:
+        message = f'Ganaste :). Escanea el qr para participar del sorteo!'
+    else:
+        message = f'Perdiste :( . Seguí participando'
+
     text = font.render(message, True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
     screen.blit(text, text_rect)
@@ -173,6 +183,8 @@ def show_question(angle):
     # Pregunta
     # Colores
     global question_pending
+    global current_question
+
     question_pending = True
     white = (255, 255, 255)
     black = (0, 0, 0)
@@ -196,6 +208,7 @@ def show_question(angle):
     screen.fill((black))
     question = questions[0]
 
+    current_question = question 
     # Cargar imágenes de los pulgares
     thumbs_up = pygame.image.load("thumbs_up.png")
     thumbs_down = pygame.image.load("thumbs_down.png")
@@ -277,7 +290,6 @@ if __name__ == "__main__":
 
                 if speed == 0 and question_showing and not question_pending:
                     playing=False
-                    print("Entramdo")
                     show_result(current_answer)
                  
             angle -= 1 * speed
