@@ -1,3 +1,4 @@
+import random
 import threading
 from io import BytesIO
 
@@ -243,7 +244,7 @@ def show_question(angle):
     pygame.time.wait(2000)
 
     screen.fill((COLOR_INDIGO))
-    question = questions[0]
+    question = random.choice(questions)
 
     current_question = question 
     # Cargar imágenes de los pulgares
