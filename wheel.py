@@ -4,11 +4,13 @@ from io import BytesIO
 import numpy as np
 import matplotlib.pyplot as plt
 import pygame
+import qrcode
 
 from questions import LABELS, Questions, questions_equivs
+
 pygame.init()
-screen_width = 1024
-screen_height = 768
+screen_width = 1920
+screen_height = 1080
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
@@ -18,7 +20,7 @@ COLOR_INDIGO = (186,29,122)
 COLOR_WHITE = (255,255,255)
 # TODO: Agregar sonido de acelerado desacelerando
 # Aumentar tamaño de la rueda
-# Hacer un QR al final para que escaneen y llenen el form de google
+# Hacer un R al final para que escaneen y llenen el form de google
 # Mejorar detección de pulgares
 # Hacer que lea solo lo ultimo al entrar a jugar por si o por no
 # Randomizar preguntas
@@ -68,6 +70,26 @@ def crear_grafico_torta(labels):
     buf.seek(0)
     return buf
 
+def show_qr():
+    # Crear el código QR
+    qr_data = FORM
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=4,
+        border=4,
+    )
+    qr.add_data(qr_data)
+    qr.make(fit=True)
+
+    # Convertir el QR a una imagen
+    qr_image = qr.make_image(fill='black', back_color='white')
+
+    # Guardar la imagen en un buffer
+    buffer = BytesIO()
+    qr_image.save(buffer, format="PNG")
+    buffer.seek(0)
+    return buffer
 
 def rotate_wheel(surf, image, pos, originPos, angle):
     # offset from pivot to center
@@ -160,17 +182,25 @@ def show_result(answer):
     correct_answer = current_question[1]
     font = pygame.font.Font(None, 49)
     if correct_answer == answer:
+        win = True
         message = f'Ganaste :). Escanea el qr para participar del sorteo!'
     else:
+        win = False
         message = f'Perdiste :( . Seguí participando'
 
     text = font.render(message, True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+
     screen.blit(text, text_rect)
+
+    if win:
+        image_rect = text.get_rect(center=(screen_width // 2, screen_height // 2))
+        buf = show_qr()
+        image = pygame.image.load(buf)
+        screen.blit(image, image_rect)
     
     pygame.display.flip()
-    pygame.time.wait(2000)
-    reset()
+    #reset()
 
 def get_label(angle):
     cant_labels = len(LABELS)
