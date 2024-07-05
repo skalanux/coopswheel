@@ -10,6 +10,13 @@ import qrcode
 from questions import LABELS, Questions, questions_equivs
 
 pygame.init()
+pygame.mixer.init()
+
+# Cargar el sonido de fondo
+pygame.mixer.music.load('path_to_your_sound_file.mp3')  # Reemplaza con la ruta a tu archivo de sonido
+pygame.mixer.music.play(-1)  # -1 significa reproducir en bucle infinito
+
+
 screen_width = 1920
 screen_height = 1080
 
@@ -25,6 +32,15 @@ COLOR_WHITE = (255,255,255)
 # Mejorar detección de pulgares
 # Hacer que lea solo lo ultimo al entrar a jugar por si o por no
 # Randomizar preguntas
+
+# Función para cambiar el pitch
+def set_pitch(pitch):
+    sound = pygame.mixer.Sound('path_to_your_sound_file.mp3')  # Mismo archivo que arriba
+    sound = sound.get_raw()
+    sound = np.frombuffer(sound, dtype=np.int16)
+    sound = np.array(sound * pitch, dtype=np.int16)
+    sound = pygame.sndarray.make_sound(sound)
+    sound.play()
 
 def crear_grafico_torta(labels):
     # Número de partes
