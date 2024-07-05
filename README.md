@@ -19,7 +19,7 @@ mkfifo gesture
 
 4. Run gesture capture:
 ```bash
-python gestures.py
+python gestures2.py
 ```
 
 5. Run wheel:
