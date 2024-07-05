@@ -87,6 +87,7 @@ def fifo_reader():
     global spinning
     global playing
     global question_pending
+    global current_answer
     while True:
         with open(FIFO_PATH, 'r') as fifo:
             while True:
@@ -100,9 +101,11 @@ def fifo_reader():
                     spinning = False
                 elif data[-1:] == "U":
                     # TODO: Send current question
+                    current_answer = True
                     question_pending = False
                 elif data[-1:] == "D":
                     # TODO: Send current question
+                    current_answer = False
                     question_pending = False
                  
 
@@ -112,6 +115,7 @@ def reset():
     global speed
     global angle
     global playing
+    global current_answer
     global question_pending
     playing = False
     spinning = False
@@ -124,22 +128,33 @@ def show_result(answer):
     # Pregunta
     # Colores
     global question_pending
-    white = (255, 255, 255)
+    white = (200, 255, 255)
     black = (0, 0, 0)
     screen.fill((black))
 
     # Fuente y tamaño del texto
     font = pygame.font.Font(None, 74)
 
-    label_chosen = 'Resultado'
-    category = questions_equivs.get(label_chosen)
+    response = 'Sí' if answer else 'No' 
 
-    message = f'Elegiste {label_chosen}'
+    message = f'Contestaste que {response} y ...'
     text = font.render(message, True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
     screen.blit(text, text_rect)
     
     pygame.display.flip()
+
+    pygame.time.wait(2000)
+
+    screen.fill((black))
+    message = f'Perdiste :( . Seguí participando'
+    text = font.render(message, True, white)
+    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+    screen.blit(text, text_rect)
+    
+    pygame.display.flip()
+    pygame.time.wait(2000)
+    reset()
 
 def get_label(angle):
     cant_labels = len(LABELS)
@@ -233,7 +248,6 @@ if __name__ == "__main__":
     question_showing = False
     question_pending = False
     playing = False
-
     while running:
         clock.tick(60)
         for event in pygame.event.get():
@@ -263,7 +277,8 @@ if __name__ == "__main__":
 
                 if speed == 0 and question_showing and not question_pending:
                     playing=False
-                    show_result(10)
+                    print("Entramdo")
+                    show_result(current_answer)
                  
             angle -= 1 * speed
 
