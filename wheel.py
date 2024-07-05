@@ -101,11 +101,9 @@ def fifo_reader():
                     spinning = False
                 elif data[-1:] == "U":
                     # TODO: Send current question
-                    show_result(True)
                     question_pending = False
                 elif data[-1:] == "D":
                     # TODO: Send current question
-                    show_result(False)
                     question_pending = False
                  
 
@@ -126,7 +124,7 @@ def reset():
 def show_result(answer):
     # Pregunta
     # Colores
-    question_pending = True
+    global question_pending
     white = (255, 255, 255)
     black = (0, 0, 0)
     screen.fill((black))
@@ -134,7 +132,11 @@ def show_result(answer):
     # Fuente y tamaño del texto
     font = pygame.font.Font(None, 74)
 
-    message = f'contestate que  {"Si if answer else No"}'
+    label_chosen = 'Resultado'
+    category = questions_equivs.get(label_chosen)
+    questions = getattr(Questions, category).value
+
+    message = f'Elegiste {label_chosen}'
     text = font.render(message, True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
     screen.blit(text, text_rect)
@@ -144,6 +146,7 @@ def show_result(answer):
 def show_question(angle):
     # Pregunta
     # Colores
+    global question_pending
     question_pending = True
     white = (255, 255, 255)
     black = (0, 0, 0)
@@ -179,6 +182,7 @@ def show_question(angle):
     thumbs_up_rect = thumbs_up.get_rect(center=(screen_width // 2 - 100, screen_height // 2 + 100))
     thumbs_down_rect = thumbs_down.get_rect(center=(screen_width // 2 + 100, screen_height // 2 + 100))
 
+    font = pygame.font.Font(None, 48)
     # Renderizar el texto de la pregunta
     text = font.render(question[0], True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
@@ -228,7 +232,9 @@ if __name__ == "__main__":
         pos = (screen.get_width()/2, screen.get_height()/2)
         
         screen.fill(0)
+        
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
+
         if playing:
             if spinning:
                 angle -= 1 * speed
@@ -238,16 +244,23 @@ if __name__ == "__main__":
                     speed -= speed/100
                 else:
                     speed = 0
-                    if not question_showing:
-                        question_showing = True
-                        show_question(angle)
 
-                angle -= 1 * speed
+                if speed == 0 and not question_showing and not question_pending:
+                    question_showing = True
+                    show_question(angle)
+
+                if speed == 0 and not question_showing and question_pending:
+                    print("Mostrando el resultado")
+                    show_result(10)
+                 
+
+            angle -= 1 * speed
 
         if not question_showing:
             pygame.draw.line(screen, (222, 255, 0), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
             pygame.display.flip()
         else:
             ...
+
     pygame.quit()
     exit()
