@@ -143,6 +143,19 @@ def show_result(answer):
     
     pygame.display.flip()
 
+def get_label(angle):
+    cant_labels = len(LABELS)
+    angle_open = 360 // cant_labels
+    angle_abs = angle % 360
+    index = -1
+    for slot in range(0,360,angle_open):
+        if angle_abs <= slot:
+            break
+        else:
+            index += 1
+
+    return list(reversed(LABELS))[index]
+
 def show_question(angle):
     # Pregunta
     # Colores
@@ -155,7 +168,7 @@ def show_question(angle):
     # Fuente y tamaño del texto
     font = pygame.font.Font(None, 74)
 
-    label_chosen = 'Cooperativismo'
+    label_chosen = get_label(angle)
     category = questions_equivs.get(label_chosen)
     questions = getattr(Questions, category).value
 
