@@ -28,6 +28,7 @@ COLOR_WHITE = (255,255,255)
 def crear_grafico_torta(labels):
     # Número de partes
     plt.rcParams['font.family'] = 'Roboto' 
+    plt.rcParams['font.size'] = 24 
     num_partes = len(labels)
 
     # Valores para las partes (iguales entre sí)
@@ -39,7 +40,7 @@ def crear_grafico_torta(labels):
     colores = [cmap(i / num_partes) for i in range(num_partes)]
     
     # Crear gráfico de torta
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(10,10))
     
     # Ajustar el color de fondo
     fig.patch.set_facecolor('white')
@@ -337,7 +338,7 @@ if __name__ == "__main__":
 
             # Coordenadas del centro del triángulo
             center_x = screen_width // 2
-            center_y = (screen_height // 2) - 160
+            center_y = (screen_height // 2) - 360
 
             # Puntos del triángulo
             point1 = (center_x, center_y + triangle_height // 2)
