@@ -22,7 +22,14 @@ class Questions(Enum):
         ("¿El INAES (Instituto Nacional de Asociativismo y Economía Social) es el organismo que regula las cooperativas en Argentina?", True),
         ("¿Una cooperativa argentina puede ser transformada en una sociedad anónima?", False),
         ("¿Las cooperativas argentinas tienen que cumplir con la Ley de Cooperativas N° 20.337?", True),
-        ("¿Es obligatorio que los miembros de una cooperativa argentina tengan igualdad de votos, independientemente del capital aportado?", True)
+        ("¿Es obligatorio que los miembros de una cooperativa argentina tengan igualdad de votos, independientemente del capital aportado?", True),
+        ("Existe una cooperativa en Australia que se especializa en fabricar colchones para canguros", False),
+        ("En Japón, hay cooperativas que ofrecen servicios de alquiler de amigos para actividades sociales y eventos ", True),
+        ("Existe una cooperativa en Francia que produce y vende perfume de lavanda exclusivamente para sus miembros.", False),
+        ("En Italia, existe una cooperativa que restaura y alquila castillos históricos para eventos y alojamiento", True),
+        ("En Argentina existe una cooperativa de artistas callejeros", True),
+        ("En Argentina existe una cooperativa que exporta miel a más de 20 países.", True),
+        ("Las cooperativas se pueden organizar en federaciones y confederaciones.", True)
     ]
     TECNOLOGIA = [
         ("¿HTML es un lenguaje de programación?", False),
@@ -34,7 +41,9 @@ class Questions(Enum):
         ("¿La inteligencia artificial y el aprendizaje automático son lo mismo?", False),
         ("¿El navegador web Google Chrome fue lanzado antes que Mozilla Firefox?", False),
         ("¿El cifrado de datos se usa para proteger la información de accesos no autorizados?", True),
-        ("¿La tecnología blockchain se utiliza principalmente en las criptomonedas?", True)
+        ("¿La tecnología blockchain se utiliza principalmente en las criptomonedas?", True),
+        ("El nombre de la mascota de Linux es Tux", True),
+        ("La mascota de Linux es un perro", False)
     ]
     PYTHON = [
         ("¿Python es un lenguaje de programación de alto nivel?", True),
@@ -49,8 +58,6 @@ class Questions(Enum):
         ("¿Las listas en Python son mutables?", True)
     ]
     ARGENTINA = [
-        ("¿Buenos Aires es la capital de Argentina?", True),
-        ("¿El tango es un género musical originario de Argentina?", True),
         ("¿El Aconcagua es la montaña más alta de América del Sur?", True),
         ("¿Argentina ganó su primera Copa del Mundo de fútbol en 1986?", False),
         ("¿La moneda oficial de Argentina es el peso argentino?", True),
@@ -58,11 +65,15 @@ class Questions(Enum):
         ("¿La Patagonia se encuentra en el norte de Argentina?", False),
         ("¿El mate es una bebida tradicional en Argentina?", True),
         ("¿Argentina es el segundo país más grande de América del Sur?", True),
-        ("¿Mar del Plata es una ciudad costera en Argentina?", True)
+        ("¿Mar del Plata es una ciudad costera en Argentina?", True),
+        ("¿Messi y Gardel cumplen el mismo día?", True),
+        ("Argentina tiene un museo dedicado enteramente al dulce de leche ", True),
+        ("En Argentina existe una isla habitada en su mayoría por conejos ", True),
+        ("La Avenida 9 de Julio en Buenos Aires es la avenida más larga del mundo", False),
+        ("Argentina es el segundo mayor productor de vino de sudamérica ", False)
+
     ]
     ROSARIO = [
-        ("¿Rosario es una ciudad en la provincia de Santa Fe, Argentina?", True),
-        ("¿El Monumento a la Bandera se encuentra en Rosario?", True),
         ("¿Rosario es la ciudad natal de Lionel Messi?", True),
         ("¿El río Paraná pasa por Rosario?", True),
         ("¿Rosario es la capital de la provincia de Santa Fe?", False),
@@ -70,7 +81,13 @@ class Questions(Enum):
         ("¿Rosario tiene uno de los parques más grandes de Argentina, el Parque Independencia?", True),
         ("¿La Universidad Nacional de Rosario es una de las principales universidades de la ciudad?", True),
         ("¿Rosario está ubicada en la región noroeste de Argentina?", False),
-        ("¿El Che Guevara nació en Rosario?", True)
+        ("¿El Che Guevara nació en Rosario?", True),
+        ("Messi tiene 8 balones de oro", True),
+        ("Rosario es famosa por sus murales callejeros, que cuentan con más de 500 obras de arte urbano", True),
+        ("En Rosario se celebra anualmente el Festival Internacional de las Esculturas de Arena", False),
+        ("Rosario es conocida por tener la mayor cantidad de heladerías por habitante en Argentina", False),
+        ("Rosario es considerada la capital del fútbol femenino", True),
+        ("Rosario siempre estuvo cerca", True)
     ]
     LATINOAMERICA = [
         ("¿Brasil es el país más grande de Latinoamérica?", True),
@@ -82,5 +99,9 @@ class Questions(Enum):
         ("¿El desierto de Atacama se encuentra en Perú?", False),
         ("¿México es parte de Latinoamérica?", True),
         ("¿La Patagonia se extiende por Chile y Argentina?", True),
-        ("¿La mayoría de los países en Latinoamérica se independizaron en el siglo XIX?", True)
+        ("¿La mayoría de los países en Latinoamérica se independizaron en el siglo XIX?", True),
+        ("El Machu Picchu, en Perú, es una de las Siete Maravillas del Mundo Moderno", True),
+        ("En México se celebra el Día del Taco Volador, donde los tacos son lanzados desde aviones para que la gente los atrape en el aire", False),
+        ("Las Islas Galápagos, en Ecuador,  fueron el laboratorio natural que inspiró la teoría de la evolución de Charles Darwin", True),
+        ("En Bolivia, el Salar Uyuni es tan plano y extenso que se utiliza para calibrar satélites debido a su precisión como espejo natural", True)
     ]

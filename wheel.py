@@ -162,7 +162,7 @@ def show_result(answer):
     global question_pending
     global current_question
 
-    white = (200, 255, 255)
+    white = (255, 255, 255)
     black = (0, 0, 0)
     screen.fill((COLOR_INDIGO))
 
