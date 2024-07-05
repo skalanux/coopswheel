@@ -317,7 +317,7 @@ if __name__ == "__main__":
                 angle -= 1 * speed
                 speed += 0.05
             else:
-                if speed > 0.01:
+                if speed > 0.05:
                     speed -= speed/100
                 else:
                     speed = 0
