@@ -1,15 +1,16 @@
-import random
+import base64
+import hashlib
 import threading
+import random
 from io import BytesIO
 from decimal import Decimal, ROUND_DOWN
 from datetime import datetime
-import hashlib
-import base64
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pygame
 import qrcode
+from matplotlib import font_manager
 
 from questions import LABELS, Questions, questions_equivs
 
@@ -24,14 +25,17 @@ ding_sound = pygame.mixer.Sound('ding.mp3')
 screen_width = 1920
 screen_height = 1080
 
-screen = pygame.display.set_mode((screen_width, screen_height))
+#screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={entry}'
+
 COLOR_INDIGO = (186,29,122)
+COLOR_INDIGO_RGB = (186/255,29/255,122/255)
 COLOR_WHITE = (255,255,255)
+
 # TODO: Agregar sonido de acelerado desacelerando
-# Hacer un R al final para que escaneen y llenen el form de google
 
 def hash_number_with_salt(number, salt):
     # Convertir el número a una cadena de bytes
@@ -48,7 +52,6 @@ def hash_number_with_salt(number, salt):
 
 def crear_grafico_torta(labels):
     # Número de partes
-    from matplotlib import font_manager
     font_manager.fontManager.addfont(CUSTOM_FONT)
     plt.rcParams['font.family'] = 'Poppins' 
     plt.rcParams['font.size'] = 24 
@@ -66,7 +69,7 @@ def crear_grafico_torta(labels):
     fig, ax = plt.subplots(figsize=(10,10))
     
     # Ajustar el color de fondo
-    fig.patch.set_facecolor('white')
+    fig.patch.set_facecolor(COLOR_INDIGO_RGB)
     ax.set_facecolor('white')
     
     # Crear el gráfico de torta
@@ -336,7 +339,7 @@ if __name__ == "__main__":
 
         pos = (screen.get_width()/2, screen.get_height()/2)
         
-        screen.fill((COLOR_WHITE))
+        screen.fill((COLOR_INDIGO))
         
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
 
@@ -380,11 +383,8 @@ if __name__ == "__main__":
             point1 = (center_x, center_y + triangle_height // 2)
             point2 = (center_x - triangle_base // 2, center_y - triangle_height // 2)
             point3 = (center_x + triangle_base // 2, center_y - triangle_height // 2)
-            pygame.draw.polygon(screen, COLOR_INDIGO, [point1, point2, point3])
-            #pygame.draw.line(screen, (('black')), (pos[0], pos[1]-180), (pos[0], pos[1]-150), 3)
+            pygame.draw.polygon(screen, COLOR_WHITE, [point1, point2, point3])
             pygame.display.flip()
-        else:
-            ...
 
         # Quit with escape
         for event in pygame.event.get():
