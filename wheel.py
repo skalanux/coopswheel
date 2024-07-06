@@ -22,6 +22,7 @@ CUSTOM_FONT = 'poppins.ttf'
 # Cargar el sonido de fondo
 ding_sound = pygame.mixer.Sound('ding.mp3')
 win_sound = pygame.mixer.Sound('win.mp3')
+loose_sound = pygame.mixer.Sound('win.mp3')
 
 screen_width = 1920
 screen_height = 1080
@@ -219,6 +220,7 @@ def show_result(answer):
     else:
         win = False
         message = f'Perdiste :( ... Seguí participando'
+        loose_sound.play()
 
     text = font.render(message, True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
