@@ -2,6 +2,7 @@ import random
 import threading
 from io import BytesIO
 from decimal import Decimal, ROUND_DOWN
+from datetime import datetime
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,11 +23,27 @@ screen_height = 1080
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
-FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={form}'
+FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={entry}'
 COLOR_INDIGO = (186,29,122)
 COLOR_WHITE = (255,255,255)
 # TODO: Agregar sonido de acelerado desacelerando
 # Hacer un R al final para que escaneen y llenen el form de google
+import hashlib
+import base64
+import os
+
+def hash_number_with_salt(number, salt):
+    # Convertir el número a una cadena de bytes
+    salted_number = (str(number)+salt).encode('utf-8')
+
+    # Crear el hash SHA-256
+    hash_object = hashlib.sha256(salted_number)
+    hash_digest = hash_object.digest()
+
+    # Codificar el hash en base64 para obtener una cadena de letras
+    hash_base64 = base64.urlsafe_b64encode(hash_digest).decode('utf-8')
+
+    return hash_base64
 
 def crear_grafico_torta(labels):
     # Número de partes
@@ -76,7 +93,9 @@ def crear_grafico_torta(labels):
 
 def show_qr():
     # Crear el código QR
-    qr_data = FORM
+    entry = datetime.now().timestamp()
+    entry = hash_number_with_salt(int(entry), 'saraza')
+    qr_data = FORM.format(entry=entry)
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -112,7 +131,6 @@ def rotate_wheel(surf, image, pos, originPos, angle):
 
     # rotate and blit the image
     surf.blit(rotated_image, rotated_image_rect)
-
 
 def fifo_reader():
     global spinning
