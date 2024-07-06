@@ -26,20 +26,7 @@ FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObW
 COLOR_INDIGO = (186,29,122)
 COLOR_WHITE = (255,255,255)
 # TODO: Agregar sonido de acelerado desacelerando
-# Aumentar tamaño de la rueda
 # Hacer un R al final para que escaneen y llenen el form de google
-# Mejorar detección de pulgares
-# Hacer que lea solo lo ultimo al entrar a jugar por si o por no
-# Randomizar preguntas
-
-# Función para cambiar el pitch
-def set_pitch(pitch):
-    sound = pygame.mixer.Sound('path_to_your_sound_file.mp3')  # Mismo archivo que arriba
-    sound = sound.get_raw()
-    sound = np.frombuffer(sound, dtype=np.int16)
-    sound = np.array(sound * pitch, dtype=np.int16)
-    sound = pygame.sndarray.make_sound(sound)
-    sound.play()
 
 def crear_grafico_torta(labels):
     # Número de partes
