@@ -235,6 +235,7 @@ def show_result(answer):
         screen.blit(image, image_rect)
     
     pygame.display.flip()
+    draw_logo()
     #reset()
 
 def get_label(angle):
@@ -305,7 +306,13 @@ def show_question(angle):
     # Actualizar la pantalla
     pygame.display.flip()
 
-
+def draw_logo():
+    image_rect = image.get_rect()
+    image_rect.topleft = (100, 100)
+    image2 = pygame.image.load('logo.png')
+   
+    screen.fill((COLOR_INDIGO))
+    screen.blit(image2, image_rect)
 
 if __name__ == "__main__":
     angle = 0
@@ -333,6 +340,7 @@ if __name__ == "__main__":
     question_pending = False
     playing = False
 
+    draw_logo()
     while running:
         clock.tick(60)
         for event in pygame.event.get():
@@ -341,7 +349,6 @@ if __name__ == "__main__":
 
         pos = (screen.get_width()/2, screen.get_height()/2)
         
-        screen.fill((COLOR_INDIGO))
         
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
 
@@ -384,7 +391,10 @@ if __name__ == "__main__":
             point3 = (center_x + triangle_base // 2, center_y - triangle_height // 2)
             pygame.draw.polygon(screen, COLOR_WHITE, [point1, point2, point3])
             pygame.draw.lines(screen, 0, True, [point1, point2, point3], 3)
+
+
             pygame.display.flip()
+            # Obtener el rectángulo de la imagen
 
         # Quit with escape
         for event in pygame.event.get():
