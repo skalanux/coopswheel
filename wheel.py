@@ -48,7 +48,9 @@ def hash_number_with_salt(number, salt):
 
 def crear_grafico_torta(labels):
     # Número de partes
-    plt.rcParams['font.family'] = 'Roboto' 
+    from matplotlib import font_manager
+    font_manager.fontManager.addfont(CUSTOM_FONT)
+    plt.rcParams['font.family'] = 'Poppins' 
     plt.rcParams['font.size'] = 24 
     num_partes = len(labels)
 
