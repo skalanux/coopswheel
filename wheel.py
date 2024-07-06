@@ -3,6 +3,8 @@ import threading
 from io import BytesIO
 from decimal import Decimal, ROUND_DOWN
 from datetime import datetime
+import hashlib
+import base64
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,9 +32,6 @@ COLOR_INDIGO = (186,29,122)
 COLOR_WHITE = (255,255,255)
 # TODO: Agregar sonido de acelerado desacelerando
 # Hacer un R al final para que escaneen y llenen el form de google
-import hashlib
-import base64
-import os
 
 def hash_number_with_salt(number, salt):
     # Convertir el número a una cadena de bytes
@@ -286,7 +285,7 @@ def show_question(angle):
     thumbs_up_rect = thumbs_up.get_rect(center=(screen_width // 2 - 100, screen_height // 2 + 100))
     thumbs_down_rect = thumbs_down.get_rect(center=(screen_width // 2 + 100, screen_height // 2 + 100))
 
-    font = pygame.font.Font(CUSTOM_FONT, 48)
+    font = pygame.font.Font(CUSTOM_FONT, 36)
     # Renderizar el texto de la pregunta
     text = font.render(question[0], True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
