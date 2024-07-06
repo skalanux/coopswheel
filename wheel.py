@@ -35,7 +35,7 @@ COLOR_INDIGO = (186,29,122)
 COLOR_INDIGO_RGB = (186/255,29/255,122/255)
 COLOR_WHITE = (255,255,255)
 
-# TODO: Agregar sonido de acelerado desacelerando
+# FIXME: Que no haga el sonido en la ultima pantalla, cuando ya no esta question_pending
 
 def hash_number_with_salt(number, salt):
     # Convertir el número a una cadena de bytes
@@ -73,7 +73,8 @@ def crear_grafico_torta(labels):
     ax.set_facecolor('white')
     
     # Crear el gráfico de torta
-    wedges, texts = ax.pie(valores, labels=None, colors=colores, startangle=90)
+    wedges, texts = ax.pie(valores, labels=None, colors=colores, startangle=90,
+                           wedgeprops={'edgecolor': 'black', 'linewidth': 1})
     
     # Ajustar las etiquetas para que estén en el centro de cada sección
     for i, wedge in enumerate(wedges):
@@ -150,8 +151,9 @@ def fifo_reader():
                 data = fifo.read()
 
                 if data[-1:] == "O":
-                    playing = True
-                    spinning = True
+                    if not question_pending:
+                        playing = True
+                        spinning = True
                 elif data[-1:] == "V":
                     reset()
                 elif data[-1:] == "X":
@@ -352,7 +354,7 @@ if __name__ == "__main__":
                 angle -= 1 * speed
                 speed += 0.05
             else:
-                if speed > 0.05:
+                if speed > 0.04:
                     speed -= speed/100
                 else:
                     speed = 0
@@ -381,6 +383,7 @@ if __name__ == "__main__":
             point2 = (center_x - triangle_base // 2, center_y - triangle_height // 2)
             point3 = (center_x + triangle_base // 2, center_y - triangle_height // 2)
             pygame.draw.polygon(screen, COLOR_WHITE, [point1, point2, point3])
+            pygame.draw.lines(screen, 0, True, [point1, point2, point3], 3)
             pygame.display.flip()
 
         # Quit with escape
