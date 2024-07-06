@@ -344,11 +344,8 @@ if __name__ == "__main__":
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
 
         if playing:
-            decimal_speed = Decimal(speed)
-            truncated_speed = decimal_speed.quantize(Decimal('0.01'), rounding=ROUND_DOWN)
-            truncated_speed = truncated_speed - int(truncated_speed)
-
-            if float(truncated_speed) % 0.01 == 0.0 and speed!=0:
+            round_angle = (round(angle % 360))
+            if round_angle % len(LABELS) == 0.0 and speed!=0:
                 ding_sound.play()
 
             if spinning:
