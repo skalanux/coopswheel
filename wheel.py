@@ -1,6 +1,7 @@
 import random
 import threading
 from io import BytesIO
+from decimal import Decimal, ROUND_DOWN
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,9 +14,7 @@ pygame.init()
 pygame.mixer.init()
 
 # Cargar el sonido de fondo
-pygame.mixer.music.load('path_to_your_sound_file.mp3')  # Reemplaza con la ruta a tu archivo de sonido
-pygame.mixer.music.play(-1)  # -1 significa reproducir en bucle infinito
-
+ding_sound = pygame.mixer.Sound('ding.mp3')
 
 screen_width = 1920
 screen_height = 1080
@@ -329,6 +328,14 @@ if __name__ == "__main__":
         rotate_wheel(screen, image, pos, (w/2, h/2), angle)
 
         if playing:
+            print(speed)
+            decimal_speed = Decimal(speed)
+            truncated_speed = decimal_speed.quantize(Decimal('0.01'), rounding=ROUND_DOWN)
+            print(truncated_speed)  # Output: 3.14
+
+            if float(decimal_speed) % 0.01 == 0.0 and speed!=0:
+                ding_sound.play()
+
             if spinning:
                 angle -= 1 * speed
                 speed += 0.05
@@ -366,6 +373,14 @@ if __name__ == "__main__":
             pygame.display.flip()
         else:
             ...
+
+        # Quit with escape
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
     pygame.quit()
     exit()

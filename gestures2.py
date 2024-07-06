@@ -9,7 +9,7 @@ options = vision.GestureRecognizerOptions(base_options=base_options)
 recognizer = vision.GestureRecognizer.create_from_options(options)
 
 # STEP 2: Initialize the camera
-cap = cv2.VideoCapture(0)  # 0 for default camera
+cap = cv2.VideoCapture(2)  # 0 for default camera
 
 def write_to_fifo(char):
     with open('gesture', 'w') as fifo:
