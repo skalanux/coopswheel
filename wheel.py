@@ -14,6 +14,8 @@ from questions import LABELS, Questions, questions_equivs
 pygame.init()
 pygame.mixer.init()
 
+CUSTOM_FONT = 'poppins.ttf'
+
 # Cargar el sonido de fondo
 ding_sound = pygame.mixer.Sound('ding.mp3')
 
@@ -187,7 +189,7 @@ def show_result(answer):
     screen.fill((COLOR_INDIGO))
 
     # Fuente y tamaño del texto
-    font = pygame.font.Font(None, 74)
+    font = pygame.font.Font(CUSTOM_FONT, 74)
 
     response = 'Sí' if answer else 'No' 
 
@@ -202,21 +204,26 @@ def show_result(answer):
 
     screen.fill((COLOR_INDIGO))
     correct_answer = current_question[1]
-    font = pygame.font.Font(None, 49)
+    font = pygame.font.Font(CUSTOM_FONT, 49)
     if correct_answer == answer:
         win = True
-        message = f'Ganaste :). Escanea el qr para participar del sorteo!'
+        message = 'Ganaste :)'
     else:
         win = False
-        message = f'Perdiste :( . Seguí participando'
+        message = f'Perdiste :( ... Seguí participando'
 
     text = font.render(message, True, white)
-    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
 
     screen.blit(text, text_rect)
 
     if win:
-        image_rect = text.get_rect(center=(screen_width // 2, screen_height // 2))
+        message = '¡Escaneá el qr para participar del sorteo!'
+        text = font.render(message, True, white)
+        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
+        screen.blit(text, text_rect)
+
+        image_rect = text.get_rect(center=((screen_width // 2) + 370, screen_height // 2 + 20))
         buf = show_qr()
         image = pygame.image.load(buf)
         screen.blit(image, image_rect)
@@ -249,7 +256,7 @@ def show_question(angle):
     screen.fill((COLOR_INDIGO))
 
     # Fuente y tamaño del texto
-    font = pygame.font.Font(None, 74)
+    font = pygame.font.Font(CUSTOM_FONT, 74)
 
     label_chosen = get_label(angle)
     category = questions_equivs.get(label_chosen)
@@ -279,7 +286,7 @@ def show_question(angle):
     thumbs_up_rect = thumbs_up.get_rect(center=(screen_width // 2 - 100, screen_height // 2 + 100))
     thumbs_down_rect = thumbs_down.get_rect(center=(screen_width // 2 + 100, screen_height // 2 + 100))
 
-    font = pygame.font.Font(None, 48)
+    font = pygame.font.Font(CUSTOM_FONT, 48)
     # Renderizar el texto de la pregunta
     text = font.render(question[0], True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
