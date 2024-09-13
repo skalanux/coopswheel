@@ -6,8 +6,8 @@ questions_equivs = {
     'Cooperativismo': 'COOPS', 
     'Argentina': 'ARGENTINA', 
     'Python': 'PYTHON', 
-    'Rosario': 'ROSARIO', 
-    'Latinoamérica': 'LATINOAMERICA'}
+    'Hurlingham': 'HURLINGHAM', 
+    'Programación': 'PROGRAMACION'}
 
 LABELS = list(questions_equivs.keys())
 
@@ -45,18 +45,59 @@ class Questions(Enum):
         ("El nombre de la mascota de Linux es Tux", True),
         ("La mascota de Linux es un perro", False)
     ]
+
     PYTHON = [
-        ("¿Python es un lenguaje de programación de alto nivel?", True),
-        ("¿Python fue creado por Guido van Rossum?", True),
-        ("¿Python es un lenguaje de programación compilado?", False),
-        ("¿La sintaxis de Python permite el uso de corchetes para delimitar bloques de código?", False),
-        ("¿Python soporta programación orientada a objetos?", True),
-        ("¿Python es conocido por su simplicidad y legibilidad?", True),
-        ("¿Python tiene un gestor de paquetes llamado pip?", True),
-        ("¿La extensión de archivo estándar para scripts de Python es .py?", True),
-        ("¿Python 2 y Python 3 son completamente compatibles entre sí?", False),
-        ("¿Las listas en Python son mutables?", True)
+    ("¿Python es un lenguaje de programación de alto nivel?", True),
+    ("¿Python fue creado por Guido van Rossum?", True),
+    ("¿Python es un lenguaje de programación compilado?", False),
+    ("¿La sintaxis de Python permite el uso de corchetes para delimitar bloques de código?", False),
+    ("¿Python soporta programación orientada a objetos?", True),
+    ("¿Python es conocido por su simplicidad y legibilidad?", True),
+    ("¿Python tiene un gestor de paquetes llamado pip?", True),
+    ("¿La extensión de archivo estándar para scripts de Python es .py?", True),
+    ("¿Python 2 y Python 3 son completamente compatibles entre sí?", False),
+    ("¿Las listas en Python son mutables?", True),
+    ("¿Los diccionarios en Python permiten claves duplicadas?", False),
+    ("¿Python soporta múltiples herencias?", True),
+    ("¿El operador '+' puede ser usado para concatenar cadenas en Python?", True),
+    ("¿Las tuplas en Python son mutables?", False),
+    ("¿Python tiene recolección automática de basura (garbage collection)?", True),
+    ("¿El módulo 'os' permite interactuar con el sistema operativo?", True),
+    ("¿Python puede ser usado para desarrollo web?", True),
+    ("¿'None' es equivalente a 'False' en Python?", False),
+    ("¿El método 'append()' agrega elementos al final de una lista?", True),
+    ("¿Python tiene tipos de datos estáticos?", False),
+    ("¿El ciclo 'while' en Python necesita una condición booleana?", True),
+    ("¿Las funciones lambda pueden tener múltiples expresiones?", False),
+    ("¿El operador '==' compara la identidad de los objetos en Python?", False),
+    ("¿Se puede definir una función dentro de otra función en Python?", True),
+    ("¿El método 'clear()' borra el contenido de una lista?", True),
+    ("¿El operador '**' se usa para la exponenciación en Python?", True),
+    ("¿El módulo 'math' en Python incluye funciones trigonométricas?", True),
+    ("¿Una variable en Python necesita ser declarada con un tipo específico?", False),
+    ("¿El statement 'global' permite modificar variables globales dentro de funciones?", True),
+    ("¿El tipo 'int' en Python tiene un límite máximo?", False),
+    ("¿Python es adecuado para scripting y automatización?", True),
+    ("¿Las clases en Python pueden tener métodos estáticos?", True),
+    ("¿El operador '//' realiza una división entera en Python?", True),
+    ("¿Python tiene una palabra clave llamada 'switch'?", False),
+    ("¿Se puede manejar excepciones en Python usando 'try-except'?", True),
+    ("¿El método 'pop()' elimina el primer elemento de una lista?", False),
+    ("¿El módulo 'json' en Python permite trabajar con JSON?", True),
+    ("¿Python es un lenguaje case-sensitive?", True),
+    ("¿El statement 'pass' se usa para definir un bloque vacío en Python?", True),
+    ("¿El operador 'is' compara la identidad de los objetos?", True),
+    ("¿Las listas en Python pueden contener diferentes tipos de datos?", True),
+    ("¿La palabra clave 'del' elimina una variable en Python?", True),
+    ("¿Python tiene soporte para el concepto de 'closures'?", True),
+    ("¿El método 'sort()' modifica la lista original?", True),
+    ("¿El ciclo 'for' en Python necesita un contador manual?", False),
+    ("¿Se puede definir propiedades en las clases usando 'property()'?", True),
+    ("¿Python permite el uso de 'decorators' para modificar el comportamiento de funciones?", True),
+    ("¿El método 'remove()' elimina un elemento de una lista por su índice?", False),
+    ("¿El statement 'yield' en Python convierte una función en un generador?", True)
     ]
+
     ARGENTINA = [
         ("¿El Aconcagua es la montaña más alta de América del Sur?", True),
         ("¿Argentina ganó su primera Copa del Mundo de fútbol en 1986?", False),
