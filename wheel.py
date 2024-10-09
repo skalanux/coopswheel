@@ -3,7 +3,6 @@ import hashlib
 import threading
 import random
 from io import BytesIO
-from decimal import Decimal, ROUND_DOWN
 from datetime import datetime
 
 import numpy as np
@@ -193,7 +192,6 @@ def show_result(answer):
     global current_question
 
     white = (255, 255, 255)
-    black = (0, 0, 0)
     screen.fill((COLOR_INDIGO))
 
     # Fuente y tamaño del texto
@@ -219,7 +217,7 @@ def show_result(answer):
         win_sound.play()
     else:
         win = False
-        message = f'Perdiste :( ... Seguí participando'
+        message = 'Perdiste :( ... Seguí participando'
         loose_sound.play()
 
     text = font.render(message, True, white)
@@ -263,7 +261,6 @@ def show_question(angle):
 
     question_pending = True
     white = (255, 255, 255)
-    black = (0, 0, 0)
     screen.fill((COLOR_INDIGO))
 
     # Fuente y tamaño del texto
@@ -326,7 +323,7 @@ if __name__ == "__main__":
 
     try:
         image = pygame.image.load(buf)
-    except:
+    except Exception:
         text = pygame.font.SysFont('Roboto', 50).render('image', False, (255, 255, 0))
         image = pygame.Surface((text.get_width()+1, text.get_height()+1))
         image.blit(text, (1, 1))
