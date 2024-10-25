@@ -253,7 +253,7 @@ def show_result(answer):
         # Hacer otra pregunta
         question_showing = True
         playing=True
-        show_question(90, False)
+        show_question(None, False)
         
     pygame.display.flip()
     draw_logo()
@@ -277,7 +277,8 @@ def show_question(angle=None, show_category=True):
     # Colores
     global question_pending
     global current_question
-
+    global label_chosen
+    
     question_pending = True
     white = (255, 255, 255)
     screen.fill((COLOR_INDIGO))
@@ -285,7 +286,9 @@ def show_question(angle=None, show_category=True):
     # Fuente y tamaño del texto
     font = pygame.font.Font(CUSTOM_FONT, 74)
 
-    label_chosen = get_label(angle)
+    if angle is not None:
+        label_chosen = get_label(angle)
+        
     category = questions_equivs.get(label_chosen)
     questions = getattr(Questions, category).value
 
