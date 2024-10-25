@@ -185,7 +185,7 @@ def reset():
     current_question = None
     speed = 0
     angle = 0
-    questions_showed = 0
+    questions_showed = []
     
 def show_result(answer):
     # Pregunta
@@ -216,42 +216,49 @@ def show_result(answer):
 
     # Clave, esto permite llamar recursivamente
     global question_showing
+    global question_showed
     global playing
-    question_showing = True
-    playing=True
-    show_question(90)
 
-    # Ahora chequear la cantidad que acertó, que al final ponga el nombre y hacemos un ranking para publicar.
 
-    #    if correct_answer == answer:
-    #        win = True
-    #        message = 'Ganaste :)'
-    #        win_sound.play()
-    #    else:
-    #        win = False
-    #        message = 'Perdiste :( ... Seguí participando'
-    #        loose_sound.play()
-    #
-    #    text = font.render(message, True, white)
-    #    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
-    #
-    #    screen.blit(text, text_rect)
-    #
-    #    if win:
-    #        message = '¡Escaneá el qr para participar del sorteo!'
-    #        text = font.render(message, True, white)
-    #        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
-    #        screen.blit(text, text_rect)
-    #
-    #        image_rect = text.get_rect(center=((screen_width // 2) + 370, screen_height // 2 + 20))
-    #        buf = show_qr()
-    #        image = pygame.image.load(buf)
-    #        screen.blit(image, image_rect)
-    #    
-    #    pygame.display.flip()
-    #    draw_logo()
-    #    #reset()
-    #
+
+    #Ahora chequear la cantidad que acertó, que al final ponga el nombre y hacemos un ranking para publicar.
+    
+    if correct_answer == answer:
+        questions_showed.append((True,''))
+        #win = True
+        message = 'Correcto!!'
+        win_sound.play()
+    else:
+        questions_showed.append((False,'La respuesta era...'))
+        #win = False
+        message = 'Buuuu'
+        loose_sound.play()
+
+    text = font.render(message, True, white)
+    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
+
+    screen.blit(text, text_rect)
+
+    #if win:
+    if len(questions_showed)==3:
+        message = '¡Escaneá el qr para participar del sorteo!'
+        text = font.render(message, True, white)
+        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
+        screen.blit(text, text_rect)
+
+        image_rect = text.get_rect(center=((screen_width // 2) + 370, screen_height // 2 + 20))
+        buf = show_qr()
+        image = pygame.image.load(buf)
+        screen.blit(image, image_rect)
+    else:
+        question_showing = True
+        playing=True
+        show_question(90, False)
+        
+    pygame.display.flip()
+    draw_logo()
+    #reset()
+    
 def get_label(angle):
     cant_labels = len(LABELS)
     angle_open = 360 // cant_labels
@@ -265,7 +272,7 @@ def get_label(angle):
 
     return list(reversed(LABELS))[index]
 
-def show_question(angle):
+def show_question(angle, show_category=True):
     # Pregunta
     # Colores
     global question_pending
@@ -282,11 +289,13 @@ def show_question(angle):
     category = questions_equivs.get(label_chosen)
     questions = getattr(Questions, category).value
 
-    message = f'Elegiste {label_chosen}'
-    text = font.render(message, True, white)
-    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
-    screen.blit(text, text_rect)
-    
+    if show_category:
+        message = f'Elegiste {label_chosen}'
+        text = font.render(message, True, white)
+        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+        screen.blit(text, text_rect)
+        
+
     pygame.display.flip()
     pygame.time.wait(2000)
 
@@ -352,7 +361,7 @@ if __name__ == "__main__":
     question_showing = False
     question_pending = False
     playing = False
-    questions_showed = 0
+    questions_showed = []
 
     draw_logo()
     while running:
@@ -384,7 +393,6 @@ if __name__ == "__main__":
                 if speed == 0 and not question_showing and not question_pending:
                     question_showing = True
                     question_pending = True
-                    questions_showed +=1
                     show_question(angle)
  
                 if speed == 0 and question_showing and not question_pending:
