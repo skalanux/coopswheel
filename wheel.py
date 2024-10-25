@@ -186,12 +186,16 @@ def reset():
     speed = 0
     angle = 0
     questions_showed = []
-    
+   
+
 def show_result(answer):
     # Pregunta
     # Colores
     global question_pending
     global current_question
+    global question_showing
+    global question_showed
+    global playing
 
     white = (255, 255, 255)
     screen.fill((COLOR_INDIGO))
@@ -214,22 +218,15 @@ def show_result(answer):
     correct_answer = current_question[1]
     font = pygame.font.Font(CUSTOM_FONT, 49)
 
-    # Clave, esto permite llamar recursivamente
-    global question_showing
-    global question_showed
-    global playing
-
-
-
     #Ahora chequear la cantidad que acertó, que al final ponga el nombre y hacemos un ranking para publicar.
     
     if correct_answer == answer:
-        questions_showed.append((True,''))
+        questions_showed.append((True, current_question, ''))
         #win = True
         message = 'Correcto!!'
         win_sound.play()
     else:
-        questions_showed.append((False,'La respuesta era...'))
+        questions_showed.append((False,current_question, 'La respuesta era'))
         #win = False
         message = 'Buuuu'
         loose_sound.play()
@@ -238,10 +235,12 @@ def show_result(answer):
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
 
     screen.blit(text, text_rect)
+    pygame.display.flip()
 
+    pygame.time.wait(2000)
     #if win:
     if len(questions_showed)==3:
-        message = '¡Escaneá el qr para participar del sorteo!'
+        message = '¡Escaneá el qr y dejanos tu nombre para el ranking!'
         text = font.render(message, True, white)
         text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
         screen.blit(text, text_rect)
@@ -251,6 +250,7 @@ def show_result(answer):
         image = pygame.image.load(buf)
         screen.blit(image, image_rect)
     else:
+        # Hacer otra pregunta
         question_showing = True
         playing=True
         show_question(90, False)
@@ -272,7 +272,7 @@ def get_label(angle):
 
     return list(reversed(LABELS))[index]
 
-def show_question(angle, show_category=True):
+def show_question(angle=None, show_category=True):
     # Pregunta
     # Colores
     global question_pending
@@ -316,6 +316,7 @@ def show_question(angle, show_category=True):
     thumbs_down_rect = thumbs_down.get_rect(center=(screen_width // 2 + 100, screen_height // 2 + 100))
 
     font = pygame.font.Font(CUSTOM_FONT, 36)
+
     # Renderizar el texto de la pregunta
     text = font.render(question[0], True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
