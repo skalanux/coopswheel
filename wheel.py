@@ -34,7 +34,7 @@ FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf0mHj3bYXszyzSl10BQ2fVoXYvL2cg
 COLOR_INDIGO = (186,29,122)
 COLOR_INDIGO_RGB = (186/255,29/255,122/255)
 COLOR_WHITE = (255,255,255)
-
+POINTS_TRUE = 200
 # FIXME: Que no haga el sonido en la ultima pantalla, cuando ya no esta question_pending
 
 def hash_number_with_salt(number, salt):
@@ -238,14 +238,16 @@ def show_result(answer):
 
     pygame.time.wait(2000)
 
-
+    
     if len(questions_showed)==MAX_QUESTIONS:
-        message = '¡Escaneá el qr y dejanos tu nombre para el ranking!'
+        count_true = sum(1 for question in questions_showed if question[0] is True)
+        score = count_true * POINTS_TRUE
+        message = f'Tu Score {score} - Súmate al Ranking!!'
         text = font.render(message, True, white)
         text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
         screen.blit(text, text_rect)
 
-        image_rect = text.get_rect(center=((screen_width // 2) + 370, screen_height // 2 + 20))
+        image_rect = text.get_rect(center=((screen_width // 2) + 300, screen_height // 2 + 20))
         buf = show_qr(score=4500)
         image = pygame.image.load(buf)
         screen.blit(image, image_rect)
