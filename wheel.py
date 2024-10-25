@@ -17,7 +17,7 @@ pygame.init()
 pygame.mixer.init()
 
 CUSTOM_FONT = 'poppins.ttf'
-
+MAX_QUESTIONS = 3
 # Cargar el sonido de fondo
 ding_sound = pygame.mixer.Sound('ding.mp3')
 win_sound = pygame.mixer.Sound('win.mp3')
@@ -176,6 +176,7 @@ def reset():
     global current_question
     global current_answer
     global question_pending
+    global questions_showed
     playing = False
     spinning = False
     question_showing = False
@@ -184,6 +185,7 @@ def reset():
     current_question = None
     speed = 0
     angle = 0
+    questions_showed = 0
     
 def show_result(answer):
     # Pregunta
@@ -211,35 +213,45 @@ def show_result(answer):
     screen.fill((COLOR_INDIGO))
     correct_answer = current_question[1]
     font = pygame.font.Font(CUSTOM_FONT, 49)
-    if correct_answer == answer:
-        win = True
-        message = 'Ganaste :)'
-        win_sound.play()
-    else:
-        win = False
-        message = 'Perdiste :( ... Seguí participando'
-        loose_sound.play()
 
-    text = font.render(message, True, white)
-    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
+    # Clave, esto permite llamar recursivamente
+    global question_showing
+    global playing
+    question_showing = True
+    playing=True
+    show_question(90)
 
-    screen.blit(text, text_rect)
+    # Ahora chequear la cantidad que acertó, que al final ponga el nombre y hacemos un ranking para publicar.
 
-    if win:
-        message = '¡Escaneá el qr para participar del sorteo!'
-        text = font.render(message, True, white)
-        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
-        screen.blit(text, text_rect)
-
-        image_rect = text.get_rect(center=((screen_width // 2) + 370, screen_height // 2 + 20))
-        buf = show_qr()
-        image = pygame.image.load(buf)
-        screen.blit(image, image_rect)
-    
-    pygame.display.flip()
-    draw_logo()
-    #reset()
-
+    #    if correct_answer == answer:
+    #        win = True
+    #        message = 'Ganaste :)'
+    #        win_sound.play()
+    #    else:
+    #        win = False
+    #        message = 'Perdiste :( ... Seguí participando'
+    #        loose_sound.play()
+    #
+    #    text = font.render(message, True, white)
+    #    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
+    #
+    #    screen.blit(text, text_rect)
+    #
+    #    if win:
+    #        message = '¡Escaneá el qr para participar del sorteo!'
+    #        text = font.render(message, True, white)
+    #        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
+    #        screen.blit(text, text_rect)
+    #
+    #        image_rect = text.get_rect(center=((screen_width // 2) + 370, screen_height // 2 + 20))
+    #        buf = show_qr()
+    #        image = pygame.image.load(buf)
+    #        screen.blit(image, image_rect)
+    #    
+    #    pygame.display.flip()
+    #    draw_logo()
+    #    #reset()
+    #
 def get_label(angle):
     cant_labels = len(LABELS)
     angle_open = 360 // cant_labels
@@ -323,7 +335,7 @@ if __name__ == "__main__":
 
     try:
         image = pygame.image.load(buf)
-    except Exception:
+    except:
         text = pygame.font.SysFont('Roboto', 50).render('image', False, (255, 255, 0))
         image = pygame.Surface((text.get_width()+1, text.get_height()+1))
         image.blit(text, (1, 1))
@@ -340,6 +352,7 @@ if __name__ == "__main__":
     question_showing = False
     question_pending = False
     playing = False
+    questions_showed = 0
 
     draw_logo()
     while running:
@@ -367,14 +380,16 @@ if __name__ == "__main__":
                 else:
                     speed = 0
 
+                
                 if speed == 0 and not question_showing and not question_pending:
                     question_showing = True
                     question_pending = True
+                    questions_showed +=1
                     show_question(angle)
-
+ 
                 if speed == 0 and question_showing and not question_pending:
-                    playing=False
-                    show_result(current_answer)
+                   playing=False
+                   show_result(current_answer)
                  
             angle -= 1 * speed
 
