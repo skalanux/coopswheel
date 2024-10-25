@@ -30,8 +30,7 @@ screen_height = 1080
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
-FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeQznptrk9y5PC468OhRbMnyO46rObWPWq2kmxB4T38VOn7OQ/viewform?entry.713637523={entry}'
-
+FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf0mHj3bYXszyzSl10BQ2fVoXYvL2cgEvbhUt-rmKmDRnTf9g/viewform?usp=pp_url&entry.964299104={score}&entry.2103901049={entry}'
 COLOR_INDIGO = (186,29,122)
 COLOR_INDIGO_RGB = (186/255,29/255,122/255)
 COLOR_WHITE = (255,255,255)
@@ -99,11 +98,11 @@ def crear_grafico_torta(labels):
     buf.seek(0)
     return buf
 
-def show_qr():
+def show_qr(score):
     # Crear el código QR
     entry = datetime.now().timestamp()
     entry = hash_number_with_salt(int(entry), 'saraza')
-    qr_data = FORM.format(entry=entry)
+    qr_data = FORM.format(entry=entry, score=score)
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -238,15 +237,16 @@ def show_result(answer):
     pygame.display.flip()
 
     pygame.time.wait(2000)
-    #if win:
-    if len(questions_showed)==3:
+
+
+    if len(questions_showed)==MAX_QUESTIONS:
         message = '¡Escaneá el qr y dejanos tu nombre para el ranking!'
         text = font.render(message, True, white)
         text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
         screen.blit(text, text_rect)
 
         image_rect = text.get_rect(center=((screen_width // 2) + 370, screen_height // 2 + 20))
-        buf = show_qr()
+        buf = show_qr(score=4500)
         image = pygame.image.load(buf)
         screen.blit(image, image_rect)
     else:
