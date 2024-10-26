@@ -237,7 +237,13 @@ def show_result(answer):
 
     
     if len(questions_showed)==MAX_QUESTIONS:
+        text = font.render(message, True, white)
+        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
+        draw_method()
+        screen.blit(text, text_rect)
+        pygame.display.flip()
         pygame.time.wait(2000)
+        draw_logo()
         count_true = sum(1 for question in questions_showed if question[0] is True)
         score = count_true * POINTS_TRUE
         message = f'Tu Score {score} - Súmate al Ranking!!'
