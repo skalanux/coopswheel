@@ -208,6 +208,7 @@ def show_result(answer):
     message = f'Contestaste que {response} y ...'
     text = font.render(message, True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+    draw_logo()    
     screen.blit(text, text_rect)
     
     pygame.display.flip()
@@ -219,30 +220,24 @@ def show_result(answer):
     font = pygame.font.Font(CUSTOM_FONT, 49)
 
     #Ahora chequear la cantidad que acertó, que al final ponga el nombre y hacemos un ranking para publicar.
-    
+    draw_logo()    
     if correct_answer == answer:
         questions_showed.append((True, current_question, ''))
         #win = True
         message = 'Correcto!!'
-        draw_correcto()
+        draw_method = draw_correcto
         win_sound.play()
     else:
         questions_showed.append((False,current_question, 'La respuesta era'))
         #win = False
         message = 'Buuuu'
-        draw_wrong()
+        draw_method = draw_wrong
         loose_sound.play()
 
-    text = font.render(message, True, white)
-    text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
-
-    screen.blit(text, text_rect)
-    pygame.display.flip()
-
-    pygame.time.wait(2000)
 
     
     if len(questions_showed)==MAX_QUESTIONS:
+        pygame.time.wait(2000)
         count_true = sum(1 for question in questions_showed if question[0] is True)
         score = count_true * POINTS_TRUE
         message = f'Tu Score {score} - Súmate al Ranking!!'
@@ -251,11 +246,19 @@ def show_result(answer):
         screen.blit(text, text_rect)
 
         image_rect = text.get_rect(center=((screen_width // 2) + 300, screen_height // 2 + 20))
-        buf = show_qr(score=4500)
+        buf = show_qr(score=score)
         image = pygame.image.load(buf)
         screen.blit(image, image_rect)
     else:
         # Hacer otra pregunta
+        text = font.render(message, True, white)
+        text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 150))
+        draw_method()
+        screen.blit(text, text_rect)
+        pygame.display.flip()
+
+        pygame.time.wait(2000)
+
         question_showing = True
         playing=True
         show_question(None, False)
@@ -297,6 +300,7 @@ def show_question(angle=None, show_category=True):
     category = questions_equivs.get(label_chosen)
     questions = getattr(Questions, category).value
 
+    draw_logo()    
     if show_category:
         message = f'Elegiste {label_chosen}'
         text = font.render(message, True, white)
@@ -328,6 +332,7 @@ def show_question(angle=None, show_category=True):
     # Renderizar el texto de la pregunta
     text = font.render(question[0], True, white)
     text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 100))
+    draw_logo()    
 
     # Dibujar el texto y las imágenes en la pantalla
     screen.blit(text, text_rect)
