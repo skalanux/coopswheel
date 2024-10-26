@@ -353,7 +353,7 @@ def draw_logo():
     screen.fill((COLOR_LILA))
     screen.blit(image2, image_rect)
 
-    image_rect.topleft = (1000, 0)
+    image_rect.topleft = (1000, -10)
     screen.blit(image3, image_rect)
 
     image_rect.topleft = (-450, 300)
