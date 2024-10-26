@@ -345,7 +345,7 @@ def show_question(angle=None, show_category=True):
 def draw_logo():
     image_rect = image.get_rect()
     image_rect.topleft = (100, 100)
-    image2 = pygame.image.load('logo.png')
+    image2 = pygame.image.load('logo_color.png')
     image3 = pygame.image.load('mancha2.png')
     image4 = pygame.image.load('mancha4.png')
     image5 = pygame.image.load('gotitas_naranjas.png')
