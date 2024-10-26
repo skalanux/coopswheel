@@ -341,9 +341,22 @@ def draw_logo():
     image_rect = image.get_rect()
     image_rect.topleft = (100, 100)
     image2 = pygame.image.load('logo.png')
+    image3 = pygame.image.load('mancha2.png')
+    image4 = pygame.image.load('mancha4.png')
+    image5 = pygame.image.load('gotitas_naranjas.png')
    
     screen.fill((COLOR_LILA))
     screen.blit(image2, image_rect)
+
+    image_rect.topleft = (1000, 0)
+    screen.blit(image3, image_rect)
+
+    image_rect.topleft = (-450, 300)
+    screen.blit(image4, image_rect)
+
+    image_rect.topleft = (1600, 800)
+    screen.blit(image5, image_rect)
+
 
 def draw_correcto():
     image_rect = image.get_rect()
