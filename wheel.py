@@ -32,7 +32,8 @@ clock = pygame.time.Clock()
 FIFO_PATH = "gesture"
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf0mHj3bYXszyzSl10BQ2fVoXYvL2cgEvbhUt-rmKmDRnTf9g/viewform?usp=pp_url&entry.964299104={score}&entry.2103901049={entry}'
 COLOR_INDIGO = (186,29,122)
-COLOR_INDIGO_RGB = (186/255,29/255,122/255)
+COLOR_LILA = (95,29,125)
+COLOR_LILA_RGB = (95/255,29/255,125/255)
 COLOR_WHITE = (255,255,255)
 POINTS_TRUE = 200
 # FIXME: Que no haga el sonido en la ultima pantalla, cuando ya no esta question_pending
@@ -69,7 +70,7 @@ def crear_grafico_torta(labels):
     fig, ax = plt.subplots(figsize=(10,10))
     
     # Ajustar el color de fondo
-    fig.patch.set_facecolor(COLOR_INDIGO_RGB)
+    fig.patch.set_facecolor(COLOR_LILA_RGB)
     ax.set_facecolor('white')
     
     # Crear el gráfico de torta
@@ -197,7 +198,7 @@ def show_result(answer):
     global playing
 
     white = (255, 255, 255)
-    screen.fill((COLOR_INDIGO))
+    screen.fill((COLOR_LILA))
 
     # Fuente y tamaño del texto
     font = pygame.font.Font(CUSTOM_FONT, 74)
@@ -213,7 +214,7 @@ def show_result(answer):
 
     pygame.time.wait(2000)
 
-    screen.fill((COLOR_INDIGO))
+    screen.fill((COLOR_LILA))
     correct_answer = current_question[1]
     font = pygame.font.Font(CUSTOM_FONT, 49)
 
@@ -223,11 +224,13 @@ def show_result(answer):
         questions_showed.append((True, current_question, ''))
         #win = True
         message = 'Correcto!!'
+        draw_correcto()
         win_sound.play()
     else:
         questions_showed.append((False,current_question, 'La respuesta era'))
         #win = False
         message = 'Buuuu'
+        draw_wrong()
         loose_sound.play()
 
     text = font.render(message, True, white)
@@ -283,7 +286,7 @@ def show_question(angle=None, show_category=True):
     
     question_pending = True
     white = (255, 255, 255)
-    screen.fill((COLOR_INDIGO))
+    screen.fill((COLOR_LILA))
 
     # Fuente y tamaño del texto
     font = pygame.font.Font(CUSTOM_FONT, 74)
@@ -304,7 +307,7 @@ def show_question(angle=None, show_category=True):
     pygame.display.flip()
     pygame.time.wait(2000)
 
-    screen.fill((COLOR_INDIGO))
+    screen.fill((COLOR_LILA))
     question = random.choice(questions)
 
     current_question = question 
@@ -339,7 +342,21 @@ def draw_logo():
     image_rect.topleft = (100, 100)
     image2 = pygame.image.load('logo.png')
    
-    screen.fill((COLOR_INDIGO))
+    screen.fill((COLOR_LILA))
+    screen.blit(image2, image_rect)
+
+def draw_correcto():
+    image_rect = image.get_rect()
+    image_rect.topleft = (890, 500)
+    image2 = pygame.image.load('logo.png')
+   
+    screen.blit(image2, image_rect)
+
+def draw_wrong():
+    image_rect = image.get_rect()
+    image_rect.topleft = (890, 500)
+    image2 = pygame.image.load('logo.png')
+   
     screen.blit(image2, image_rect)
 
 if __name__ == "__main__":
