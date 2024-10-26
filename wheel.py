@@ -366,14 +366,14 @@ def draw_logo():
 def draw_correcto():
     image_rect = image.get_rect()
     image_rect.topleft = (890, 500)
-    image2 = pygame.image.load('logo.png')
+    image2 = pygame.image.load('happy.png')
    
     screen.blit(image2, image_rect)
 
 def draw_wrong():
     image_rect = image.get_rect()
     image_rect.topleft = (890, 500)
-    image2 = pygame.image.load('logo.png')
+    image2 = pygame.image.load('sad.png')
    
     screen.blit(image2, image_rect)
 
