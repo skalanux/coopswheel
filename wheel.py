@@ -17,7 +17,7 @@ pygame.init()
 pygame.mixer.init()
 
 CUSTOM_FONT = 'poppins.ttf'
-MAX_QUESTIONS = 3
+MAX_QUESTIONS = 5
 # Cargar el sonido de fondo
 ding_sound = pygame.mixer.Sound('ding.mp3')
 win_sound = pygame.mixer.Sound('win.mp3')
@@ -224,7 +224,7 @@ def show_result(answer):
     if correct_answer == answer:
         questions_showed.append((True, current_question, ''))
         #win = True
-        message = 'Correcto!!'
+        message = '¡¡Correcto!!'
         draw_method = draw_correcto
         win_sound.play()
     else:
@@ -246,7 +246,7 @@ def show_result(answer):
         draw_logo()
         count_true = sum(1 for question in questions_showed if question[0] is True)
         score = count_true * POINTS_TRUE
-        message = f'Tu Score {score} - Súmate al Ranking!!'
+        message = f'Tu Score {score} - ¡¡Súmate al Ranking!!'
         text = font.render(message, True, white)
         text_rect = text.get_rect(center=(screen_width // 2, screen_height // 2 - 80))
         screen.blit(text, text_rect)
