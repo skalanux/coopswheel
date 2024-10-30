@@ -4,7 +4,7 @@ from enum import Enum
 questions_equivs = {
     'Tecnología': 'TECNOLOGIA', 
     'Cooperativismo': 'COOPS', 
-    'Software libre': 'SOFTWARE_LIBRE', 
+    'Transformaciones': 'SOCIOCULTURALES', 
     'Comunicación': 'COMUNICACION ', 
     'Palomar/Morón': 'PALOMAR_MORON', 
     'Huella digital': 'HUELLA_DIGITAL'}
@@ -13,23 +13,23 @@ LABELS = list(questions_equivs.keys())
 
 class Questions(Enum):
 COOPS = [
-    ("¿El cooperativismo argentino tiene sus raíces en el siglo XIX?", True),
-    ("¿Las cooperativas en Argentina pueden operar en cualquier sector económico?", True),
-    ("¿Es obligatorio que una cooperativa argentina distribuya todos sus excedentes entre sus miembros?", False),
-    ("¿Pueden las cooperativas argentinas recibir beneficios fiscales?", True),
-    ("¿La membresía en una cooperativa argentina es limitada a un número fijo de personas?", False),
-    ("¿Es necesario que todas las cooperativas en Argentina tengan un Consejo de Administración?", True),
-    ("¿El INAES es el organismo que regula las cooperativas en Argentina?", True),
-    ("¿Una cooperativa argentina puede ser transformada en una sociedad anónima?", False),
-    ("¿Las cooperativas argentinas tienen que cumplir con la Ley de Cooperativas N° 20.337?", True),
-    ("¿Es obligatorio que los miembros de una cooperativa tengan igualdad de votos?", True),
-    ("Existe una cooperativa en Australia que fabrica colchones para canguros", False),
-    ("En Japón, hay cooperativas que ofrecen alquiler de amigos para actividades sociales y eventos ", True),
-    ("Existe una cooperativa en Francia que produce perfume de lavanda para sus miembros.", False),
-    ("En Italia, hay una cooperativa que restaura y alquila castillos", True),
-    ("En Argentina existe una cooperativa de artistas callejeros", True),
-    ("En Argentina existe una cooperativa que exporta miel a más de 20 países.", True),
-    ("Las cooperativas se pueden organizar en federaciones y confederaciones.", True)
+    ("¿El cooperativismo en Argentina comenzó en el siglo XIX?", True),
+    ("¿Las cooperativas en Argentina pueden trabajar en diferentes áreas?", True),
+    ("¿Las cooperativas argentinas deben repartir todos sus beneficios entre sus miembros?", False),
+    ("¿Las cooperativas en Argentina pueden recibir apoyo fiscal?", True),
+    ("¿El número de miembros en una cooperativa argentina es limitado?", False),
+    ("¿Todas las cooperativas en Argentina necesitan un Consejo de Administración?", True),
+    ("¿Las cooperativas argentinas pueden cambiar su forma legal?", False),
+    ("¿Las cooperativas argentinas deben seguir ciertas normas?", True),
+    ("¿Todos los miembros de una cooperativa tienen el mismo voto?", True),
+    ("¿Hay una cooperativa en Australia que hace colchones para canguros?", False),
+    ("¿Las cooperativas argentinas pueden ofrecer servicios de salud?", True),
+    ("¿Existen cooperativas en Argentina que producen alimentos orgánicos?", True),
+    ("¿Las cooperativas en Argentina pueden ayudar a emprendedores?", True),
+    ("¿Hay cooperativas en Argentina que apoyan a pequeños agricultores?", True),
+    ("¿Pueden las cooperativas argentinas crear programas de capacitación?", True),
+    ("¿Las cooperativas argentinas pueden participar en ferias y eventos?", True),
+    ("¿Las cooperativas pueden colaborar entre sí para lograr objetivos comunes?", True)
 ]
 
 COMUNICACION = [
@@ -198,7 +198,7 @@ SOCIOCULTURALES = [
     ("¿Las redes sociales comenzaron en el siglo XIX?", False),
     ("¿El cambio climático es una preocupación global en el siglo XXI?", True),
     ("¿Los movimientos por la igualdad de género han tenido gran importancia en el siglo XXI?", True),
-    ("¿La migración masiva es un fenómeno destacado en el siglo XXI?", True),
+    ("¿La migración masiva ha continuado siendo un fenómeno relevante en el siglo XXI debido a conflictos y crisis?", True),
     ("¿El concepto de 'economía colaborativa' se refiere a compartir recursos y servicios?", True),
     ("¿La cultura pop no tiene influencia en los valores de la juventud actual?", False),
     ("¿El acceso a la educación es más equitativo en todas las partes del mundo en el siglo XXI?", False),
@@ -229,7 +229,7 @@ SOCIOCULTURALES = [
     ("¿El fenómeno del 'cyberbullying' se ha convertido en un problema en la era digital?", True),
     ("¿La cultura de consumo masivo ha disminuido en el siglo XXI?", False),
     ("¿Las identidades culturales tienden a desaparecer con la globalización?", False, "Algunas se han fortalecido y diversificado"),
-    ("¿Los avances en biotecnología pueden cambiar la vida de las personas en el siglo XXI?", True),
+    ("¿Las nuevas formas de trabajo colaborativo han sido facilitadas por la tecnología en el siglo XXI?", True),
     ("¿El entretenimiento digital ha reducido el interés en la literatura tradicional?", False, "Aún existen grandes comunidades lectoras"),
     ("¿El teletrabajo puede ayudar a reducir la contaminación ambiental?", True)
 ]
